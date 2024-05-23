@@ -1,7 +1,8 @@
 /* 전반적인 스타일 */
 @font-face {
-  font-family: 'Ownglyph_meetme-Rg';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+  font-family: "Ownglyph_meetme-Rg";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2")
+    format("woff2");
   font-weight: normal;
   font-style: normal;
 }
@@ -51,7 +52,7 @@ main {
 }
 
 #recommend-btn {
-  font-family: 'Ownglyph_meetme-Rg';
+  font-family: "Ownglyph_meetme-Rg";
   background-color: #ffa500; /* 배경색을 오렌지색으로 설정합니다. */
   color: #000000; /* 텍스트 색상을 흰색으로 설정합니다. */
   padding: 5px 15px; /* 내부 여백을 추가합니다. */
@@ -89,9 +90,13 @@ main {
   color: #ffffff;
 }
 
+/* CSS: ../css/detail.css */
+.highlight-comment {
+  border: 2px solid red; /* 테두리 색상 */
+}
 
 #comment-form button {
-  font-family: 'Ownglyph_meetme-Rg';
+  font-family: "Ownglyph_meetme-Rg";
   background-color: #ffa500;
   color: #000000;
   padding: 5px 12px;
@@ -125,7 +130,7 @@ main {
   position: absolute; /* 추천 버튼을 절대 위치로 설정합니다. */
   top: 10px; /* 부모 요소 상단에서 5px 아래에 배치합니다. */
   right: 10px; /* 부모 요소 오른쪽에서 5px 왼쪽에 배치합니다. */
-  font-family: 'Ownglyph_meetme-Rg';
+  font-family: "Ownglyph_meetme-Rg";
   background-color: #ffa500; /* 배경색을 오렌지색으로 설정합니다. */
   color: #000000; /* 텍스트 색상을 흰색으로 설정합니다. */
   padding: 5px 10px; /* 내부 여백을 추가합니다. */
