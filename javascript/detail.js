@@ -10,6 +10,34 @@ const auth = firebase.auth(); // Firebase 인증에 대한 레퍼런스
 const urlParams = new URLSearchParams(window.location.search);
 const boardId = urlParams.get("id");
 
+// boardId가 유효한지 확인
+if (!boardId) {
+  alert("유효하지 않은 게시물 ID입니다.");
+  throw new Error("Invalid boardId");
+}
+
+// 조회수 업데이트 함수
+function updateViewsCount(boardId, currentViews) {
+  boardsRef
+    .child(boardId)
+    .child("views")
+    .transaction((views) => {
+      return (views || 0) + 1;
+    })
+    .then(() => {
+      // 업데이트된 조회수 가져오기
+      boardsRef.child(boardId).once("value", (snapshot) => {
+        const board = snapshot.val();
+        if (board) {
+          document.getElementById("view-count").innerText = board.views || 0;
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error updating view count:", error);
+    });
+}
+
 // 게시물 세부 정보를 렌더링하는 함수
 function renderArticleDetail(board) {
   // HTML 요소들을 가져옴
@@ -30,14 +58,25 @@ function renderArticleDetail(board) {
         <p>
           작성자: ${username} &nbsp;&nbsp;
           <span style="text-align: center;">작성일 : ${createdAt}</span>
-          <span style="float: right;">조회수 : <span id="view-count">${board.views || 0}</span> &nbsp;&nbsp; 추천수 : <span id="recommend-count">${board.recommendations || 0}</span></span>
+          <span style="float: right;">조회수 : <span id="view-count">${
+            board.views || 0
+          }</span> &nbsp;&nbsp; 추천수 : <span id="recommend-count">${
+        board.recommendations || 0
+      }</span></span>
         </p>
         <p>${board.content}</p>
-        ${board.imageUrl ? `<img src="${board.imageUrl}" alt="Bulletin Image" style="max-width: 500px; max-height: 500px;" />` : ""}
+        ${
+          board.imageUrl
+            ? `<img src="${board.imageUrl}" alt="Bulletin Image" style="max-width: 500px; max-height: 500px;" />`
+            : ""
+        }
       `;
 
       // 추천 버튼을 articleDetail 요소 뒤에 추가합니다.
-      articleDetail.insertAdjacentHTML('afterend', '<div id="recommend-btn-container"><button id="recommend-btn">추 천</button></div>');
+      articleDetail.insertAdjacentHTML(
+        "afterend",
+        '<div id="recommend-btn-container"><button id="recommend-btn">추 천</button></div>'
+      );
 
       // 현재 사용자가 게시물 작성자인 경우 수정 및 삭제 버튼 표시
       if (currentUser && currentUser.uid === userId) {
@@ -77,6 +116,7 @@ function openEditModal(board) {
   const editContent = document.getElementById("edit-content");
   const editImage = document.getElementById("edit-image");
   const editImagePreview = document.getElementById("edit-image-preview");
+  const editNewBtn = document.getElementById("edit_new_btn");
 
   // 모달 내용 초기화
   initModalContent(board, editTitle, editContent, editImage, editImagePreview);
@@ -96,6 +136,10 @@ function openEditModal(board) {
     }
   };
 
+  editNewBtn.onclick = function () {
+    modal.style.display = "none";
+  };
+
   // 수정 폼 제출 이벤트 처리
   document.getElementById("edit-form").onsubmit = function (e) {
     e.preventDefault();
@@ -107,7 +151,13 @@ function openEditModal(board) {
 }
 
 // 모달 컨텐츠 초기화 함수
-function initModalContent(board, editTitle, editContent, editImage, editImagePreview) {
+function initModalContent(
+  board,
+  editTitle,
+  editContent,
+  editImage,
+  editImagePreview
+) {
   editTitle.value = board.title; // 제목 입력 필드 초기화
   editContent.value = board.content; // 내용 입력 필드 초기화
 
@@ -139,57 +189,78 @@ function updatePost(boardId, title, content, imageFile, prevImageUrl) {
 // 게시물 데이터 업데이트 함수
 function updatePostData(boardId, title, content, imageUrl) {
   // 게시물 업데이트 및 화면 갱신
-  boardsRef.child(boardId).update({ title, content, imageUrl }).then(() => {
-    boardsRef.child(boardId).once("value", (snapshot) => {
-      const board = snapshot.val();
-      if (board) {
-        renderArticleDetail(board); // 게시물 세부 정보 다시 렌더링
-        document.getElementById("edit-modal").style.display = "none"; // 모달 닫기
-      }
+  boardsRef
+    .child(boardId)
+    .update({ title, content, imageUrl })
+    .then(() => {
+      boardsRef.child(boardId).once("value", (snapshot) => {
+        const board = snapshot.val();
+        if (board) {
+          renderArticleDetail(board); // 게시물 세부 정보 다시 렌더링
+          document.getElementById("edit-modal").style.display = "none"; // 모달 닫기
+          location.reload(); // 페이지 새로고침
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error updating post:", error);
     });
-  }).catch((error) => {
-    console.error("Error updating post:", error);
-  });
 }
 
 // 게시물 삭제 함수
 function deletePost(boardId) {
   if (confirm("정말로 이 게시물을 삭제하시겠습니까?")) {
-    boardsRef.child(boardId).remove().then(() => {
-      alert("게시물이 성공적으로 삭제되었습니다.");
-      window.location.href = "list.html"; // 리스트 페이지로 리다이렉트
-    }).catch((error) => {
-      console.error("Error deleting post:", error);
-    });
+    boardsRef
+      .child(boardId)
+      .remove()
+      .then(() => {
+        alert("게시물이 성공적으로 삭제되었습니다.");
+        window.location.href = "list.html"; // 리스트 페이지로 리다이렉트
+      })
+      .catch((error) => {
+        console.error("Error deleting post:", error);
+      });
   }
 }
 
 // 게시물 추천 함수
 function recommendBoard(boardId) {
-  boardsRef.child(boardId).transaction((board) => {
-    if (board) {
-      board.recommendations = (board.recommendations || 0) + 1; // 추천 수 증가
-    }
-    return board;
-  }).then(() => {
-    boardsRef.child(boardId).once("value", (snapshot) => {
-      const board = snapshot.val();
+  boardsRef
+    .child(boardId)
+    .transaction((board) => {
       if (board) {
-        document.getElementById("recommend-count").innerText = board.recommendations || 0; // 추천 수 업데이트
+        board.recommendations = (board.recommendations || 0) + 1; // 추천 수 증가
       }
+      return board;
+    })
+    .then(() => {
+      boardsRef.child(boardId).once("value", (snapshot) => {
+        const board = snapshot.val();
+        if (board) {
+          document.getElementById("recommend-count").innerText =
+            board.recommendations || 0; // 추천 수 업데이트
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error recommending board:", error);
     });
-  }).catch((error) => {
-    console.error("Error recommending board:", error);
-  });
 }
 
 // 초기 댓글 및 게시물 정보 가져오기 및 렌더링
 function fetchCommentsAndRenderBoardDetails() {
   // 게시물 정보 가져오기
+  if (!boardId) {
+    console.error("Invalid boardId");
+    return;
+  }
+
   boardsRef.child(boardId).once("value", (snapshot) => {
     const board = snapshot.val();
     if (board) {
       renderArticleDetail(board); // 게시물 세부 정보 렌더링
+    } else {
+      console.error("Board not found");
     }
   });
 
@@ -199,32 +270,48 @@ function fetchCommentsAndRenderBoardDetails() {
 
 // 댓글 추가 함수
 function addComment(boardId, userId, content) {
+  if (!boardId || !userId || !content) {
+    console.error("Invalid input for adding comment");
+    return;
+  }
+
   const newCommentRef = commentsRef.push();
-  newCommentRef.set({
-    boardId,
-    userId,
-    content,
-    createdAt: firebase.database.ServerValue.TIMESTAMP,
-    recommendations: 0,
-  }).then(() => {
-    // 댓글 추가 후 댓글 목록 새로고침
-    document.getElementById("comment-content").value = ""; // 댓글 입력 필드 초기화
-    fetchComments(boardId); // 댓글 목록 다시 가져오기
-  }).catch((error) => {
-    console.error("Error adding comment:", error);
-  });
+  newCommentRef
+    .set({
+      boardId,
+      userId,
+      content,
+      createdAt: firebase.database.ServerValue.TIMESTAMP,
+      recommendations: 0,
+    })
+    .then(() => {
+      // 댓글 추가 후 댓글 목록 새로고침
+      document.getElementById("comment-content").value = ""; // 댓글 입력 필드 초기화
+      fetchComments(boardId); // 댓글 목록 다시 가져오기
+    })
+    .catch((error) => {
+      console.error("Error adding comment:", error);
+    });
 }
 
 // 댓글 가져오기 및 렌더링
 function fetchComments(boardId) {
-  commentsRef.orderByChild("boardId").equalTo(boardId).once("value", (snapshot) => {
-    const commentsList = document.getElementById("comments-list");
-    commentsList.innerHTML = "";
-    snapshot.forEach((childSnapshot) => {
-      const comment = childSnapshot.val();
-      renderComment(comment, childSnapshot.key); // 댓글 렌더링
+  if (!boardId) {
+    console.error("Invalid boardId");
+    return;
+  }
+
+  commentsRef
+    .orderByChild("boardId")
+    .equalTo(boardId)
+    .once("value", (snapshot) => {
+      const commentsList = document.getElementById("comments-list");
+      commentsList.innerHTML = "";
+      snapshot.forEach((childSnapshot) => {
+        const comment = childSnapshot.val();
+        renderComment(comment, childSnapshot.key); // 댓글 렌더링
+      });
     });
-  });
 }
 
 // 댓글 렌더링 함수
@@ -240,21 +327,30 @@ function renderComment(comment, commentId) {
     const username = user ? user.nickname : "Unknown User"; // 사용자 닉네임 또는 "Unknown User"
     const createdAt = new Date(comment.createdAt).toLocaleString(); // 작성일시를 지역 시간 문자열로 변환
 
+    // 추천수가 10 이상이면 highlight-comment 클래스 추가
+    if (comment.recommendations >= 10) {
+      commentItem.classList.add("highlight-comment");
+    }
+
     // 댓글 항목 렌더링
     commentItem.innerHTML = `
       <div class="comment-meta">
         <p style="display: inline;">작성자: ${username} &nbsp;&nbsp; 작성일 ${createdAt}</p>
         <button class="recommend-comment-btn" data-id="${commentId}" style="display: inline; margin-left: 10px;">추천</button>
-        &nbsp; 추천수 : <span id="comment-recommend-count-${commentId}" style="display: inline;">${comment.recommendations ? comment.recommendations : 1}</span>
+        &nbsp; 추천수 : <span id="comment-recommend-count-${commentId}" style="display: inline;">${
+      comment.recommendations ? comment.recommendations : 0
+    }</span>
       </div>
       <br>
       <p>${comment.content}</p>
     `;
 
     // 댓글 추천 버튼 클릭 이벤트 처리
-    commentItem.querySelector(".recommend-comment-btn").addEventListener("click", (e) => {
-      recommendComment(e.target.getAttribute("data-id"));
-    });
+    commentItem
+      .querySelector(".recommend-comment-btn")
+      .addEventListener("click", (e) => {
+        recommendComment(e.target.getAttribute("data-id"));
+      });
 
     // 댓글 목록에 추가
     commentsList.appendChild(commentItem);
@@ -263,23 +359,50 @@ function renderComment(comment, commentId) {
 
 // 댓글 추천 함수
 function recommendComment(commentId) {
-  commentsRef.child(commentId).transaction((comment) => {
-    if (comment) {
-      comment.recommendations = (comment.recommendations || 0) + 1; // 추천 수 증가
-    }
-    return comment;
-  }).then(() => {
-    // 추천 후 추천 수 업데이트
-    commentsRef.child(commentId).once("value", (snapshot) => {
-      const comment = snapshot.val();
+  commentsRef
+    .child(commentId)
+    .transaction((comment) => {
       if (comment) {
-        document.getElementById(`comment-recommend-count-${commentId}`).innerText = comment.recommendations || 0;
+        comment.recommendations = (comment.recommendations || 0) + 1; // 추천 수 증가
       }
+      return comment;
+    })
+    .then(() => {
+      // 추천 후 추천 수 업데이트 및 하이라이트 적용
+      commentsRef.child(commentId).once("value", (snapshot) => {
+        const comment = snapshot.val();
+        if (comment) {
+          const recommendCountElement = document.getElementById(
+            `comment-recommend-count-${commentId}`
+          );
+          recommendCountElement.innerText = comment.recommendations || 0;
+
+          const commentItem = recommendCountElement.closest(".comment-item");
+          if (comment.recommendations >= 10) {
+            commentItem.classList.add("highlight-comment");
+          } else {
+            commentItem.classList.remove("highlight-comment");
+          }
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error recommending comment:", error);
     });
-  }).catch((error) => {
-    console.error("Error recommending comment:", error);
-  });
 }
+
+// 댓글 작성 폼 제출 이벤트 설정
+document.getElementById("comment-form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const commentContent = document.getElementById("comment-content").value;
+  const currentUser = auth.currentUser;
+
+  if (currentUser) {
+    addComment(boardId, currentUser.uid, commentContent);
+  } else {
+    alert("로그인이 필요합니다.");
+  }
+});
 
 // 초기 댓글 및 게시물 정보 가져오기 및 렌더링
 fetchCommentsAndRenderBoardDetails();
