@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="main-logo-container">
+      <h1 class="main-logo">존망 PC</h1>
+    </div>
+    <div class="container">
+      <h2>로그인</h2>
+      <form id="login-form">
+        <input
+          type="email"
+          id="login-email"
+          placeholder="아이디(이메일)"
+          required
+        />
+        <input
+          type="password"
+          id="login-password"
+          placeholder="비밀번호"
+          required
+        />
+        <div id="login-error-message" class="error-message"></div>
+        <div class="button-container">
+          <button type="button" id="go-signup">회원가입</button>
+          <button type="submit">로그인</button>
+        </div>
+      </form>
+    </div>
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+    </div>
+    <!-- 성공 모달 -->
+    <div id="success-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <p id="success-message"></p>
+      </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="javascript/firebase-init.js"></script>
+    <script src="javascript/index.js"></script>
+  </body>
+</html>

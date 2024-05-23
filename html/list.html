@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>자유게시판</title>
+  <link rel="stylesheet" href="../css/list.css" />
+</head>
+<body>
+  <header>
+    <!-- 페이지 제목과 글쓰기 버튼 -->
+    <h1>자유 게시판</h1>
+    <button id="create-post-btn">글쓰기</button>
+  </header>
+  <main>
+    <!-- 게시판 헤더 -->
+    <div id="board-header">
+      <div class="board-header-item">제목</div>
+      <div class="board-header-item">작성자</div>
+      <div class="board-header-item">작성일</div>
+      <div class="board-header-item">조회수</div>
+      <div class="board-header-item">추천수</div>
+    </div>
+    <!-- 게시판 목록 -->
+    <div id="board-list"></div>
+    <!-- 페이지네이션 -->
+    <div id="pagination"></div>
+  </main>
+  <!-- 검색 바 -->
+  <div class="search-container">
+    <div class="search-bar">
+      <input type="text" id="search" placeholder="제목 입력" />
+      <button id="search-button">검색</button>
+    </div>
+  </div>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+  <!-- Firebase 초기화 및 자바스크립트 파일 -->
+  <script src="../javascript/firebase-init.js"></script>
+  <script src="../javascript/list.js"></script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+/* styles.css */
+
+@font-face {
+  font-family: "EF_jejudoldam";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ownglyph_meetme-Rg';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #1e1e1e;
+  color: #fff;
+  height: 35%;
+}
+
+.logo {
+  cursor: default;
+  font-family: "EF_jejudoldam";
+  font-weight: bold;
+  font-size: 40px;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.menu-icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.search-bar {
+  cursor: default;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  padding: 7.5px;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+}
+
+.search-bar button {
+  font-family: 'Ownglyph_meetme-Rg';
+  font-size: 20px;
+  padding: 4px 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffa500;
+  color: #000000;
+  cursor: pointer;
+}
+
+nav.sidebar {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #1e1e1e;
+  overflow-x: hidden;
+  transition: left 0.3s;
+  z-index: 1000;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+nav.sidebar .profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+nav.sidebar .profile .profile-img-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+nav.sidebar .profile .profile-img-container img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+nav.sidebar .profile .profile-img-container .loading-spinner {
+  display: none; /* 기본적으로 숨김 */
+  position: absolute;
+  top: 30%;
+  left: 28%;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s linear infinite;
+  transform: translate(-50%, -50%);
+}
+
+nav.sidebar .profile .nickname {
+  margin: 10px 0px;
+  font-size: 18px;
+}
+
+nav.sidebar .profile button {
+  padding: 5px 10px;
+  background-color: #ffa500;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+nav.sidebar .menu {
+  font-family: 'Ownglyph_meetme-Rg';
+  list-style: none;
+  padding: 10px; /* 패딩 추가 */
+  margin: 10px 0; /* 마진 추가 */
+  flex-grow: 1;
+  max-height: 400px; /* 최대 높이를 설정하여 스크롤이 생기도록 */
+  overflow-y: auto; /* 세로 스크롤을 활성화 */
+}
+
+/* 스크롤바의 너비 설정 */
+nav.sidebar .menu::-webkit-scrollbar {
+  width: 12px;
+}
+
+/* 스크롤바의 트랙(배경) 스타일 */
+nav.sidebar .menu::-webkit-scrollbar-track {
+  background: #1e1e1e; /* 트랙 배경색 */
+  border-radius: 10px; /* 테두리 반경 */
+}
+
+/* 스크롤바의 손잡이 스타일 */
+nav.sidebar .menu::-webkit-scrollbar-thumb {
+  background-color: #ffa500; /* 손잡이 색상 */
+  border-radius: 10px; /* 테두리 반경 */
+  border: 3px solid #1e1e1e; /* 손잡이 테두리 */
+}
+
+/* 스크롤바의 손잡이 위로 마우스를 올렸을 때 스타일 */
+nav.sidebar .menu::-webkit-scrollbar-thumb:hover {
+  background-color: #ff7f00; /* 손잡이 색상 (호버 시) */
+}
+
+nav.sidebar .menu-item {
+  font-size: 24px;
+  position: relative;
+  margin-bottom: 20px; /* 각 메뉴 아이템 사이에 마진 추가 */
+  cursor: default; /* 기본 커서로 변경 */
+}
+
+nav.sidebar .menu-item > a {
+  display: block;
+  padding: 15px 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+nav.sidebar .submenu {
+  display: none;
+  background-color: #1e1e1e; /* submenu 배경색 */
+  list-style: none;
+  padding: 10px 0px 0px 8px; /* 서브메뉴 패딩 추가 */
+  margin: 0;
+  opacity: 0;
+  animation: slideFromTop 0.5s ease forwards; /* 페이드인 애니메이션 */
+}
+
+@keyframes slideFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px); /* 위에서 아래로 -10px 이동합니다. */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0); /* 이동하지 않고 원래 위치로 돌아옵니다. */
+  }
+}
+
+nav.sidebar .submenu.visible {
+  display: block; /* 'visible' 클래스가 추가되면 서브메뉴를 보이게 합니다 */
+}
+
+nav.sidebar .submenu-item {
+  margin-bottom: 10px; /* 서브메뉴 아이템 간격 추가 */
+  border-bottom: 1px solid #ffffff; /* 메뉴 아이템 구분선 추가 */
+  cursor: default; /* 기본 커서로 변경 */
+}
+
+nav.sidebar .submenu-item:hover {
+  background-color: rgb(0, 0, 0, 0.3); /* 마우스를 올렸을 때 변경할 배경색 (검정색의 30% 투명도) */
+}
+
+nav.sidebar .submenu-item:last-child {
+  margin-bottom: 0; /* 마지막 서브메뉴 아이템은 아래에 마진 제거 */
+}
+
+nav.sidebar .submenu-item > a {
+  display: block;
+  padding: 10px 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px); /* 위에서 아래로 나타나는 효과 */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+nav.sidebar #logout-btn {
+  padding: 10px;
+  margin: 20px 20px 35px 20px;
+  background-color: #d9534f;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  align-self: center;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.slider-container {
+  font-family: 'Ownglyph_meetme-Rg';
+  position: relative;
+  max-width: 100%;
+  margin: 20px 10px;
+  border: 1px solid white;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.slider {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+  min-width: 100%;
+  height: 400px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slider-btn {
+  position: absolute;
+  bottom: 20px;
+  padding: 10px 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.prev {
+  left: 10px;
+}
+
+.next {
+  right: 10px;
+}
+
+.slider-dots {
+  display: none;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.dot {
+  display: none;
+  width: 10px;
+  height: 10px; /* 변경: 10%에서 10px로 */
+  margin: 0 5px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: #717171;
+}
+
+.image-gallery {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+  overflow-x: scroll; /* 스크롤바를 항상 표시하여 마우스로 스크롤할 수 있게 합니다 */
+  margin: 15px;
+  gap: 10px;
+  -ms-overflow-style: none; /* IE 및 Edge용 스크롤바 숨김 */
+  scrollbar-width: none; /* Firefox용 스크롤바 숨김 */
+}
+
+.image-gallery img {
+  max-width: 95%;
+  height: auto;
+  margin: 0 5px;
+  border-radius: 5px;
+  transition: transform 0.3s;
+}
+
+.image-gallery::-webkit-scrollbar {
+  display: none; /* Webkit 기반 브라우저(Chrome, Safari 등)용 스크롤바 숨김 */
+}
+
+.image-gallery img:hover {
+  transform: scale(1.06);
+}
+
+.slider-btn {
+  text-decoration: none; /* 밑줄 없애기 */
+}

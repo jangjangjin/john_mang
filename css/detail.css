@@ -1,0 +1,222 @@
+/* 전반적인 스타일 */
+@font-face {
+  font-family: 'Ownglyph_meetme-Rg';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #121212;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+main {
+  padding: 20px;
+}
+
+/* 게시물 상세 스타일 */
+#article-detail {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* 기존에 50px에서 20px로 수정 */
+}
+
+#article-detail p {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1px;
+}
+
+#article-detail p span:last-child {
+  text-align: right;
+}
+
+#recommend-btn-container {
+  text-align: center; /* 추천 버튼을 가운데 정렬합니다. */
+  margin: 10px 10px;
+  margin-bottom: 20px;
+}
+
+#recommend-btn {
+  font-family: 'Ownglyph_meetme-Rg';
+  background-color: #ffa500; /* 배경색을 오렌지색으로 설정합니다. */
+  color: #000000; /* 텍스트 색상을 흰색으로 설정합니다. */
+  padding: 5px 15px; /* 내부 여백을 추가합니다. */
+  border: none; /* 테두리를 없앱니다. */
+  border-radius: 4px; /* 버튼을 둥글게 만듭니다. */
+  cursor: pointer; /* 마우스를 가져다 대면 포인터 모양으로 변경됩니다. */
+  transition: background-color 0.3s ease; /* 배경색 변화에 애니메이션을 추가합니다. */
+  font-size: 28px;
+}
+
+#recommend-btn:hover {
+  background-color: #ff7f00; /* 호버 시 배경색을 더 진한 오렌지색으로 변경합니다. */
+}
+
+/* 댓글 섹션 스타일 */
+#comments-section {
+  background-color: #1e1e1e;
+  padding: 5px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#comments-section h2 {
+  margin-top: 3px;
+  margin-left: 5px;
+}
+
+#comment-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #333;
+  color: #ffffff;
+}
+
+
+#comment-form button {
+  font-family: 'Ownglyph_meetme-Rg';
+  background-color: #ffa500;
+  color: #000000;
+  padding: 5px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 24px;
+}
+
+#comment-form button:hover {
+  background-color: #ff7f00; /* 호버 시 배경색을 더 진한 오렌지색으로 변경합니다. */
+}
+
+#comments-list {
+  margin-top: 20px;
+}
+
+.comment-item {
+  background-color: #333;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  position: relative; /* 자식 요소를 상대 위치로 설정합니다. */
+}
+
+.comment-item p {
+  margin: 0;
+}
+
+.recommend-comment-btn {
+  position: absolute; /* 추천 버튼을 절대 위치로 설정합니다. */
+  top: 10px; /* 부모 요소 상단에서 5px 아래에 배치합니다. */
+  right: 10px; /* 부모 요소 오른쪽에서 5px 왼쪽에 배치합니다. */
+  font-family: 'Ownglyph_meetme-Rg';
+  background-color: #ffa500; /* 배경색을 오렌지색으로 설정합니다. */
+  color: #000000; /* 텍스트 색상을 흰색으로 설정합니다. */
+  padding: 5px 10px; /* 내부 여백을 추가합니다. */
+  border: none; /* 테두리를 없앱니다. */
+  border-radius: 4px; /* 버튼을 둥글게 만듭니다. */
+  cursor: pointer; /* 마우스를 가져다 대면 포인터 모양으로 변경됩니다. */
+  transition: background-color 0.3s ease; /* 배경색 변화에 애니메이션을 추가합니다. */
+  font-size: 18px;
+}
+
+.recommend-comment-btn:hover {
+  background-color: #ff7f00; /* 호버 시 배경색을 더 진한 오렌지색으로 변경합니다. */
+}
+
+#comment-form {
+  width: 98%; /* form 요소의 너비를 설정합니다. */
+}
+
+#comment-content {
+  font-size: 16px;
+  width: 100%;
+  height: 40px; /* text-area의 높이를 100px로 설정합니다. */
+  padding: 10px; /* 내부 여백을 추가합니다. */
+  margin-bottom: 10px; /* 아래쪽 여백을 추가하여 다음 요소와의 간격을 조절합니다. */
+  border: 1px solid #333; /* 테두리를 추가합니다. */
+  border-radius: 4px; /* 테두리를 둥글게 만듭니다. */
+  background-color: #333; /* 배경색을 설정합니다. */
+  color: #ffffff; /* 텍스트 색상을 흰색으로 설정합니다. */
+  resize: none; /* 사용자가 text-area 크기를 수직으로만 조절할 수 있게 합니다. */
+}
+
+/* 모달 스타일 */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #1e1e1e;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 4px;
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 게시물 수정 폼 스타일 */
+#edit-form input[type="text"],
+#edit-form textarea,
+#edit-form input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: #333;
+  color: #ffffff;
+}
+
+#edit-form button {
+  background-color: #ffa500;
+  color: #ffffff;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+#edit-image-preview {
+  max-width: 100%;
+  margin-bottom: 10px;
+}

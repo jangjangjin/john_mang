@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Main Page</title>
+    <link rel="stylesheet" href="../css/main.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <div class="menu-icon" id="menu-icon">
+          &#9776;
+          <!-- 햄버거 메뉴 아이콘 -->
+        </div>
+        <div class="logo">존망 PC</div>
+        <div class="search-bar">
+          <input type="text" placeholder="내용 입력" />
+          <button>검색</button>
+        </div>
+      </div>
+    </header>
+
+    <nav class="sidebar" id="sidebar">
+      <div class="profile">
+        <div class="profile-img-container">
+          <img
+            id="profile-img"
+            src="../imgs/profileimg.png"
+            alt="Profile Image"
+          />
+          <div id="loading-spinner" class="loading-spinner"></div>
+        </div>
+        <div class="nickname" id="nickname">User Nickname</div>
+        <input type="file" id="profile-upload" style="display: none" />
+        <button id="upload-btn">프로필 이미지 변경</button>
+      </div>
+      <ul class="menu">
+        <li class="menu-item">
+          커뮤니티
+          <ul class="submenu">
+            <li class="submenu-item" id="Reddit">자유게시판</li>
+            <li class="submenu-item">정보게시판</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          PC 추천
+          <ul class="submenu">
+            <li class="submenu-item">사무용</li>
+            <li class="submenu-item">게임용</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          부품
+          <ul class="submenu">
+            <li class="submenu-item">CPU</li>
+            <li class="submenu-item">GPU</li>
+            <li class="submenu-item">RAM</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          Menu 4
+          <ul class="submenu">
+            <li class="submenu-item">Submenu 4-1</li>
+            <li class="submenu-item">Submenu 4-2</li>
+            <li class="submenu-item">Submenu 4-3</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          Menu 5
+          <ul class="submenu">
+            <li class="submenu-item">Submenu 5-1</li>
+            <li class="submenu-item">Submenu 5-2</li>
+            <li class="submenu-item">Submenu 5-3</li>
+          </ul>
+        </li>
+      </ul>
+      <button id="logout-btn">로그아웃</button>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <div class="slider-container">
+      <div class="slider">
+        <div class="slide">
+          <img src="../imgs/mainimg.png" alt="Slide 1" />
+          <a
+            href="https://prod.danawa.com/info/?pcode=17982335&cate=112753"
+            class="slider-btn"
+            target="_blank"
+            >Learn More</a
+          >
+        </div>
+        <div class="slide">
+          <img src="../imgs/mainimg_2.png" alt="Slide 2" />
+          <a href="https://example.com/2" class="slider-btn" target="_blank"
+            >Learn More</a
+          >
+        </div>
+        <div class="slide">
+          <img src="../imgs/mainimg_3.png" alt="Slide 3" />
+          <a href="https://example.com/3" class="slider-btn" target="_blank"
+            >Learn More</a
+          >
+        </div>
+      </div>
+      <button class="slider-nav prev">❮</button>
+      <button class="slider-nav next">❯</button>
+    </div>
+    <div class="slider-dots">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+
+    <!-- 추가된 이미지 갤러리 -->
+    <div class="image-gallery">
+      <a
+        href="https://www.compuzone.co.kr/event_zone/eventzone_view.htm?EventNo=47940&bannerid=MainRollingBanner"
+        target="_blank"
+      >
+        <img src="../imgs/bottomimg.jpg" alt="Gallery Image 1" />
+      </a>
+      <a
+        href="https://www.compuzone.co.kr/event_zone/eventzone_view.htm?EventNo=48081&bannerid=MainRollingBanner"
+        target="_blank"
+      >
+        <img src="../imgs/bottomimg2.jpg" alt="Gallery Image 2" />
+      </a>
+      <a
+        href="https://www.compuzone.co.kr/event_zone/eventzone_view.htm?EventNo=48103&bannerid=MainRollingBanner"
+        target="_blank"
+      >
+        <img src="../imgs/bottomimg3.jpg" alt="Gallery Image 3" />
+      </a>
+      <a
+        href="https://www.compuzone.co.kr/event_zone/eventzone_view.htm?EventNo=48256&bannerid=MainRollingBanner"
+        target="_blank"
+      >
+        <img src="../imgs/bottomimg4.jpg" alt="Gallery Image 4" />
+      </a>
+      <a
+        href="https://www.compuzone.co.kr/event_zone/eventzone_view.htm?EventNo=48118&bannerid=MainRollingBanner"
+        target="_blank"
+      >
+        <img src="../imgs/bottomimg5.jpg" alt="Gallery Image 5" />
+      </a>
+      <a
+        href="https://www.compuzone.co.kr/event_zone/eventzone_view.htm?EventNo=47851&bannerid=MainRollingBanner"
+        target="_blank"
+      >
+        <img src="../imgs/bottomimg6.jpg" alt="Gallery Image 6" />
+      </a>
+      <a
+        href="https://www.compuzone.co.kr/event_zone/eventzone_view.htm?EventNo=48180&bannerid=MainRollingBanner"
+        target="_blank"
+      >
+        <img src="../imgs/bottomimg7.jpg" alt="Gallery Image 7" />
+      </a>
+      <!-- 필요에 따라 더 많은 이미지 추가 가능 -->
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+
+    <script src="../javascript/firebase-init.js"></script>
+    <script src="../javascript/main.js"></script>
+    <script src="../javascript/menu-toggle.js"></script>
+  </body>
+</html>
