@@ -124,7 +124,6 @@ sidebarOverlay.addEventListener("click", () => {
   sidebar.classList.remove("open");
   sidebarOverlay.classList.remove("show");
 });
-
 const profileImg = document.getElementById("profile-img");
 const profileUpload = document.getElementById("profile-upload");
 const uploadBtn = document.getElementById("upload-btn");

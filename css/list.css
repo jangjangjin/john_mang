@@ -194,6 +194,15 @@ nav.sidebar .submenu {
   animation: slideFromTop 0.5s ease forwards; /* 페이드인 애니메이션 */
 }
 
+/* list.css */
+nav.sidebar.open {
+  left: 0; /* 왼쪽에서 0으로 설정하여 화면에 나타나게 합니다 */
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
 @keyframes slideFromTop {
   from {
     opacity: 0;
