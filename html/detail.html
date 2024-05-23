@@ -1,65 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Article Detail</title>
-  <link rel="stylesheet" href="../css/detail.css">
-</head>
-<body>
-  <header>
-    <h1 id="detail_header_title"></h1>
-  </header>
-  <main>
-    <!-- Article Detail -->
-    <div id="article-detail">
-      <p id="detail-info">
-        작성자: <span id="author-name"></span> | 작성일: <span id="created-at"></span> |
-        조회수: <span id="view-count"></span> | 추천수: <span id="recommend-count"></span>
-      </p>
-      <p id="article-content"></p>
-      <div id="image-container"></div>
-      <div id="recommend-btn-container">
-        <button id="recommend-btn">추천</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article Detail</title>
+    <link rel="stylesheet" href="../css/detail.css" />
+  </head>
+  <body>
+    <header>
+      <h1 id="detail_header_title"></h1>
+    </header>
+    <main>
+      <!-- Article Detail -->
+      <div id="article-detail">
+        <p id="detail-info">
+          작성자: <span id="author-name"></span> | 작성일:
+          <span id="created-at"></span> | 조회수:
+          <span id="view-count"></span> | 추천수:
+          <span id="recommend-count"></span>
+        </p>
+        <p id="article-content"></p>
+        <div id="image-container"></div>
+        <div id="recommend-btn-container">
+          <button id="recommend-btn">추천</button>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div id="comments-section">
+        <h2>댓글</h2>
+        <form id="comment-form">
+          <textarea
+            id="comment-content"
+            placeholder="댓글 입력"
+            required
+          ></textarea>
+          <button type="submit">등록</button>
+        </form>
+        <div id="comments-list"></div>
+      </div>
+    </main>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h2>게시물 수정</h2>
+        <form id="edit-form">
+          <input type="text" id="edit-title" placeholder="제목" required />
+          <textarea id="edit-content" placeholder="내용" required></textarea>
+          <input type="file" id="edit-image" />
+          <img
+            id="edit-image-preview"
+            src=""
+            alt="이미지 미리보기"
+            style="display: none"
+          />
+          <button type="submit" id="edit_new_btn">변경 사항 저장</button>
+        </form>
       </div>
     </div>
 
-    <!-- Comments Section -->
-    <div id="comments-section">
-      <h2>댓글</h2>
-      <form id="comment-form">
-        <textarea id="comment-content" placeholder="댓글 입력" required></textarea>
-        <button type="submit">등록</button>
-      </form>
-      <div id="comments-list"></div>
-    </div>
-  </main>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
 
-  <!-- Edit Modal -->
-  <div id="edit-modal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <h2>게시물 수정</h2>
-      <form id="edit-form">
-        <input type="text" id="edit-title" placeholder="제목" required>
-        <textarea id="edit-content" placeholder="내용" required></textarea>
-        <input type="file" id="edit-image">
-        <img id="edit-image-preview" src="" alt="이미지 미리보기" style="display: none;">
-        <button type="submit">변경 사항 저장</button>
-      </form>
-    </div>
-  </div>
+    <!-- Firebase 초기화 -->
+    <script src="../javascript/firebase-init.js"></script>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
-
-  <!-- Firebase 초기화 -->
-  <script src="../javascript/firebase-init.js"></script>
-
-  <!-- 자바스크립트 파일 -->
-  <script src="../javascript/detail.js"></script>
-</body>
+    <!-- 자바스크립트 파일 -->
+    <script src="../javascript/detail.js"></script>
+  </body>
 </html>
