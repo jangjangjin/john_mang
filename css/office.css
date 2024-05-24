@@ -1,163 +1,171 @@
-@font-face {
-    font-family: 'Ownglyph_meetme-Rg';
-    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.form-section {
+  grid-column: 1 / span 1;
+}
+.recommendation-section {
+  grid-column: 2 / span 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.recommendation-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: auto;
+  overflow-y: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #121212;
-    color: #ffffff;
-    margin: 0;
-    padding: 0;
-}
-
-
-header {
-    font-family: 'Ownglyph_meetme-Rg';
-    background-color: #1e1e1e;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 24px;
-}
-main{
-    margin-left:50px;
+main {
+  margin-left: 50px;
 }
 h1 {
-    font-size: 40px;
-    margin: 0;
-    cursor: pointer;
+  font-size: 40px;
+  margin: 0;
+  cursor: pointer;
 }
 h2 {
-    font-family: 'Ownglyph_meetme-Rg';
+  font-family: "Ownglyph_meetme-Rg";
 }
 
 .slider-container {
-    width: 500px; 
-    height: 300px;
-    display: flex;
-    align-items: center;
-   
-    margin: 20px;
+  width: 500px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+
+  margin: 20px;
 }
 
 .labels {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    margin-right: 20px;
-    font-family: 'Ownglyph_meetme-Rg';
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  margin-right: 20px;
+  font-family: "Ownglyph_meetme-Rg";
 }
 
 .label {
-    font-size: 18px;
-    transition: color 0.2s, background-color 0.2s;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: left;
-    white-space: nowrap;
+  font-size: 18px;
+  transition: color 0.2s, background-color 0.2s;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
 }
 
-
 .label.active {
-    background-color: #f05365;
-    color: #ffffff;
+  background-color: #f05365;
+  color: #ffffff;
 }
 
 .slider {
-    transform: rotate(-90deg);
-    width: 300px; 
-    margin: 0 auto;
-    -webkit-appearance: none;
-    appearance: none;
-    height: 8px;
-    background:#1e1e1e;
-    border-radius: 5px;
-    outline: none;
-    transition: background 0.3s;
+  transform: rotate(-90deg);
+  width: 300px;
+  margin: 0 auto;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: #1e1e1e;
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.3s;
 }
 
-.slider:hover{
-    background: linear-gradient(to right,#01e714, #07c1f0);
+.slider:hover {
+  background: linear-gradient(to right, #01e714, #07c1f0);
 }
 
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 40px;
-    height: 40px;
-    background-image: url('../imgs/rocket.png');
-    background-size: cover; 
-    cursor: pointer; 
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
-    transition: background 0.3s;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  background-image: url("../imgs/rocket.png");
+  background-size: cover;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
 }
-.slider::-webkit-slider-thumb:hover{
-    background-image: url('../imgs/rocker.png');
+.slider::-webkit-slider-thumb:hover {
+  background-image: url("../imgs/rocker.png");
 }
 
 .slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    background: #4CAF50;
-    cursor: pointer;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); 
-    transition: background 0.3s;
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
 }
 
 .slider::-moz-range-thumb:hover {
-    background: #66BB6A;
+  background: #66bb6a;
 }
 label {
-    display: block;
-    margin-top: 20px;
-    font-family: 'Ownglyph_meetme-Rg';
+  display: block;
+  margin-top: 20px;
+  font-family: "Ownglyph_meetme-Rg";
 }
 
 select {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    border: none;
-    font-size: 16px;
-    font-family: 'Ownglyph_meetme-Rg';
-    background-color: #1e1e1e;
-    color: #ffffff;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  font-family: "Ownglyph_meetme-Rg";
+  background-color: #1e1e1e;
+  color: #ffffff;
 }
 
 select:focus {
-    outline: none;
-    border: 2px solid #f05365;
+  outline: none;
+  border: 2px solid #f05365;
 }
 .form-row {
-    display: flex;
-    align-items: center;
-    gap: 20px; 
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 .select-group {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 button {
-    width: 350px;
-    font-size: 30px;
-    padding: 10px 20px; 
-    background-color: #f05365; 
-    color: white; 
-    border: none; 
-    cursor: pointer; 
-    border-radius: 5px; 
-    font-family: 'Ownglyph_meetme-Rg';
-    transition: background-color 0.3s; 
+  width: 350px;
+  font-size: 30px;
+  padding: 10px 20px;
+  background-color: #f05365;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: "Ownglyph_meetme-Rg";
+  transition: background-color 0.3s;
 }
 button:hover {
-    background-color: #e71029; 
+  background-color: #e71029;
 }

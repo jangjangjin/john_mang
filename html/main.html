@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Main Page</title>
+    <link rel="stylesheet" href="../css/header_menu.css" />
     <link rel="stylesheet" href="../css/main.css" />
   </head>
   <body>
@@ -21,6 +22,7 @@
       </div>
     </header>
 
+    <!-- 사이드 바 -->
     <nav class="sidebar" id="sidebar">
       <div class="profile">
         <div class="profile-img-container">
@@ -53,7 +55,8 @@
         <li class="menu-item">
           부품
           <ul class="submenu">
-            <li class="submenu-item">CPU</li>
+            <li class="submenu-item" id="cpu">CPU</li>
+            <li class="submenu-item" id="Case">Case</li>
             <li class="submenu-item">GPU</li>
             <li class="submenu-item">RAM</li>
           </ul>
@@ -74,6 +77,7 @@
             <li class="submenu-item">Submenu 5-3</li>
           </ul>
         </li>
+        <li class="menu-item" id="home">Home</li>
       </ul>
       <button id="logout-btn">로그아웃</button>
     </nav>
@@ -166,7 +170,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
 
     <script src="../javascript/firebase-init.js"></script>
+    <script src="../javascript/header_menu.js"></script>
     <script src="../javascript/main.js"></script>
-    <script src="../javascript/menu-toggle.js"></script>
   </body>
 </html>
