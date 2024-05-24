@@ -5,81 +5,373 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Office PC Suggest</title>
     <link rel="stylesheet" href="../css/office.css" />
+    <link rel="stylesheet" href="../css/header_menu.css" />
+    <style></style>
   </head>
   <body>
+    <!-- 헤더  -->
     <header>
-      <h1>사무용 PC 추천</h1>
+      <div class="header-container">
+        <div class="menu-icon" id="menu-icon">
+          &#9776;
+          <!-- 햄버거 메뉴 아이콘 -->
+        </div>
+        <div class="logo">존망PC</div>
+        <div class="search-bar">
+          <input type="text" placeholder="내용 입력" />
+          <button>검색</button>
+        </div>
+      </div>
     </header>
+
+    <!-- 사이드 바
+     -->
+    <!-- 사이드 바 -->
+    <nav class="sidebar" id="sidebar">
+      <div class="profile">
+        <div class="profile-img-container">
+          <img
+            id="profile-img"
+            src="../imgs/profileimg.png"
+            alt="Profile Image"
+          />
+          <div id="loading-spinner" class="loading-spinner"></div>
+        </div>
+        <div class="nickname" id="nickname">User Nickname</div>
+        <input type="file" id="profile-upload" style="display: none" />
+        <button id="upload-btn">프로필 이미지 변경</button>
+      </div>
+      <ul class="menu">
+        <li class="menu-item">
+          커뮤니티
+          <ul class="submenu">
+            <li class="submenu-item" id="Reddit">자유게시판</li>
+            <li class="submenu-item">정보게시판</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          PC 추천
+          <ul class="submenu">
+            <li class="submenu-item" id="office">사무용</li>
+            <li class="submenu-item">게임용</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          부품
+          <ul class="submenu">
+            <li class="submenu-item" id="cpu">CPU</li>
+            <li class="submenu-item" id="Case">Case</li>
+            <li class="submenu-item" id="Cooler">Cooler</li>
+            <li class="submenu-item" id="HDD">HDD</li>
+            <li class="submenu-item" id="MBoard">MBoard</li>
+            <li class="submenu-item" id="Power">Power</li>
+            <li class="submenu-item" id="RAM">RAM</li>
+            <li class="submenu-item" id="SSD">SSD</li>
+            <li class="submenu-item" id="VGA">VGA</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          Menu 4
+          <ul class="submenu">
+            <li class="submenu-item">Submenu 4-1</li>
+            <li class="submenu-item">Submenu 4-2</li>
+            <li class="submenu-item">Submenu 4-3</li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          Menu 5
+          <ul class="submenu">
+            <li class="submenu-item">Submenu 5-1</li>
+            <li class="submenu-item">Submenu 5-2</li>
+            <li class="submenu-item">Submenu 5-3</li>
+          </ul>
+        </li>
+        <li class="menu-item" id="home">Home</li>
+      </ul>
+      <button id="logout-btn">로그아웃</button>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <main>
-      <div class="slider-container">
-        <div class="labels" id="budgetLabels">
-          <div class="label" data-value="6">250~350 만원대</div>
-          <div class="label" data-value="5">200~240 만원대</div>
-          <div class="label" data-value="4">150~190 만원대</div>
-          <div class="label" data-value="3">120~140 만원대</div>
-          <div class="label" data-value="2">90~110 만원대</div>
-          <div class="label" data-value="1">60~80 만원대</div>
-          <div class="label" data-value="0">~50 만원대</div>
+      <h1>사무용 PC 추천</h1>
+      <div class="container">
+        <div class="form-section">
+          <div class="slider-container">
+            <div class="labels" id="budgetLabels">
+              <div class="label" data-value="6">250~350 만원대</div>
+              <div class="label" data-value="5">200~240 만원대</div>
+              <div class="label" data-value="4">150~190 만원대</div>
+              <div class="label" data-value="3">120~140 만원대</div>
+              <div class="label" data-value="2">90~110 만원대</div>
+              <div class="label" data-value="1">60~80 만원대</div>
+              <div class="label" data-value="0">~50 만원대</div>
+            </div>
+            <input
+              type="range"
+              min="0"
+              max="6"
+              value="0"
+              class="slider"
+              id="budgetSlider"
+            />
+          </div>
+          <br />
+          <div class="form-row">
+            <div class="select-group">
+              <label for="cpuBrand">CPU 브랜드</label>
+              <select id="cpuBrand" name="cpuBrand" required>
+                <option value="ANY">상관없음</option>
+                <option value="AMD">AMD</option>
+                <option value="Intel">Intel</option>
+              </select>
+            </div>
+            <div class="select-group">
+              <label for="preferredManufacturer">선호 제조사</label>
+              <select
+                id="preferredManufacturer"
+                name="preferredManufacturer"
+                required
+              >
+                <option value="ANY">상관없음</option>
+                <option value="AFOX">AFOX</option>
+                <option value="ASUS">ASUS</option>
+                <option value="COLORFUL">COLORFUL</option>
+                <option value="EVGA">EVGA</option>
+                <option value="GAINWARD">GAINWARD</option>
+                <option value="GIGABYTE">GIGABYTE</option>
+                <option value="MAXSUN">MAXSUN</option>
+                <option value="MSI">MSI</option>
+                <option value="PNY">PNY</option>
+                <option value="STCOM">STCOM</option>
+                <option value="ZOTAC">ZOTAC</option>
+                <option value="갤럭시">갤럭시</option>
+                <option value="이엠텍">이엠텍</option>
+              </select>
+            </div>
+            <div class="select-group">
+              <label for="memorySize">저장공간</label>
+              <select id="memorySize" name="memorySize" required>
+                <option value="0">상관없음</option>
+                <option value="1">250GB</option>
+                <option value="2">500GB</option>
+                <option value="3">1TB</option>
+                <option value="4">2TB</option>
+                <option value="5">4TB</option>
+                <option value="6">5TB 이상</option>
+              </select>
+            </div>
+          </div>
+          <br /><br /><br />
+          <button type="submit">추천 받기</button>
+          <div id="recommendationResult"></div>
         </div>
-        <input
-          type="range"
-          min="0"
-          max="6"
-          value="0"
-          class="slider"
-          id="budgetSlider"
-        />
+        <div class="recommendation-section">
+          <div class="recommendation-box">
+            <h3>추천 견적 1</h3>
+            <table>
+              <tr>
+                <th>부품</th>
+                <th>가격</th>
+              </tr>
+              <tr>
+                <td>CPU</td>
+                <td>가격1</td>
+              </tr>
+              <tr>
+                <td>쿨러</td>
+                <td>가격2</td>
+              </tr>
+              <tr>
+                <td>메인보드</td>
+                <td>가격3</td>
+              </tr>
+              <tr>
+                <td>메모리</td>
+                <td>가격4</td>
+              </tr>
+              <tr>
+                <td>그래픽카드</td>
+                <td>가격5</td>
+              </tr>
+              <tr>
+                <td>SSD</td>
+                <td>가격6</td>
+              </tr>
+              <tr>
+                <td>HDD</td>
+                <td>가격7</td>
+              </tr>
+              <tr>
+                <td>케이스</td>
+                <td>가격8</td>
+              </tr>
+              <tr>
+                <td>파워</td>
+                <td>가격9</td>
+              </tr>
+              <tr>
+                <td>총합</td>
+                <td>총가격1</td>
+              </tr>
+            </table>
+          </div>
+          <div class="recommendation-box">
+            <h3>추천 견적 2</h3>
+            <table>
+              <tr>
+                <th>부품</th>
+                <th>가격</th>
+              </tr>
+              <tr>
+                <td>CPU</td>
+                <td>가격1</td>
+              </tr>
+              <tr>
+                <td>쿨러</td>
+                <td>가격2</td>
+              </tr>
+              <tr>
+                <td>메인보드</td>
+                <td>가격3</td>
+              </tr>
+              <tr>
+                <td>메모리</td>
+                <td>가격4</td>
+              </tr>
+              <tr>
+                <td>그래픽카드</td>
+                <td>가격5</td>
+              </tr>
+              <tr>
+                <td>SSD</td>
+                <td>가격6</td>
+              </tr>
+              <tr>
+                <td>HDD</td>
+                <td>가격7</td>
+              </tr>
+              <tr>
+                <td>케이스</td>
+                <td>가격8</td>
+              </tr>
+              <tr>
+                <td>파워</td>
+                <td>가격9</td>
+              </tr>
+              <tr>
+                <td>총합</td>
+                <td>총가격2</td>
+              </tr>
+            </table>
+          </div>
+          <div class="recommendation-box">
+            <h3>추천 견적 3</h3>
+            <table>
+              <tr>
+                <th>부품</th>
+                <th>가격</th>
+              </tr>
+              <tr>
+                <td>CPU</td>
+                <td>가격1</td>
+              </tr>
+              <tr>
+                <td>쿨러</td>
+                <td>가격2</td>
+              </tr>
+              <tr>
+                <td>메인보드</td>
+                <td>가격3</td>
+              </tr>
+              <tr>
+                <td>메모리</td>
+                <td>가격4</td>
+              </tr>
+              <tr>
+                <td>그래픽카드</td>
+                <td>가격5</td>
+              </tr>
+              <tr>
+                <td>SSD</td>
+                <td>가격6</td>
+              </tr>
+              <tr>
+                <td>HDD</td>
+                <td>가격7</td>
+              </tr>
+              <tr>
+                <td>케이스</td>
+                <td>가격8</td>
+              </tr>
+              <tr>
+                <td>파워</td>
+                <td>가격9</td>
+              </tr>
+              <tr>
+                <td>총합</td>
+                <td>총가격3</td>
+              </tr>
+            </table>
+          </div>
+          <div class="recommendation-box">
+            <h3>추천 견적 4</h3>
+            <table>
+              <tr>
+                <th>부품</th>
+                <th>가격</th>
+              </tr>
+              <tr>
+                <td>CPU</td>
+                <td>가격1</td>
+              </tr>
+              <tr>
+                <td>쿨러</td>
+                <td>가격2</td>
+              </tr>
+              <tr>
+                <td>메인보드</td>
+                <td>가격3</td>
+              </tr>
+              <tr>
+                <td>메모리</td>
+                <td>가격4</td>
+              </tr>
+              <tr>
+                <td>그래픽카드</td>
+                <td>가격5</td>
+              </tr>
+              <tr>
+                <td>SSD</td>
+                <td>가격6</td>
+              </tr>
+              <tr>
+                <td>HDD</td>
+                <td>가격7</td>
+              </tr>
+              <tr>
+                <td>케이스</td>
+                <td>가격8</td>
+              </tr>
+              <tr>
+                <td>파워</td>
+                <td>가격9</td>
+              </tr>
+              <tr>
+                <td>총합</td>
+                <td>총가격4</td>
+              </tr>
+            </table>
+          </div>
+        </div>
       </div>
-      <br />
-      <div class="form-row">
-        <div class="select-group">
-          <label for="cpuBrand">CPU 브랜드</label>
-          <select id="cpuBrand" name="cpuBrand" required>
-            <option value="ANY">상관없음</option>
-            <option value="AMD">AMD</option>
-            <option value="Intel">Intel</option>
-          </select>
-        </div>
-        <div class="select-group">
-          <label for="preferredManufacturer">선호 제조사</label>
-          <select
-            id="preferredManufacturer"
-            name="preferredManufacturer"
-            required
-          >
-            <option value="ANY">상관없음</option>
-            <option value="AFOX">AFOX</option>
-            <option value="ASUS">ASUS</option>
-            <option value="COLORFUL">COLORFUL</option>
-            <option value="EVGA">EVGA</option>
-            <option value="GAINWARD">GAINWARD</option>
-            <option value="GIGABYTE">GIGABYTE</option>
-            <option value="MAXSUN">MAXSUN</option>
-            <option value="MSI">MSI</option>
-            <option value="PNY">PNY</option>
-            <option value="STCOM">STCOM</option>
-            <option value="ZOTAC">ZOTAC</option>
-            <option value="갤럭시">갤럭시</option>
-            <option value="이엠텍">이엠텍</option>
-          </select>
-        </div>
-        <div class="select-group">
-          <label for="memorySize">저장공간</label>
-          <select id="memorySize" name="memorySize" required>
-            <option value="0">상관없음</option>
-            <option value="1">250GB</option>
-            <option value="2">500GB</option>
-            <option value="3">1TB</option>
-            <option value="4">2TB</option>
-            <option value="5">4TB</option>
-            <option value="6">5TB 이상</option>
-          </select>
-        </div>
-      </div>
-      <br /><br /><br />
-      <button type="submit">추천 받기</button>
-      <div id="recommendationResult"></div>
     </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="../javascript/firebase-init.js"></script>
+    <script src="../javascript/header_menu.js"></script>
     <script src="../javascript/office.js"></script>
   </body>
 </html>
