@@ -1,15 +1,16 @@
-// main.js
-
+// Firebase 인증, 데이터베이스, 저장소 객체 초기화
 const auth = firebase.auth();
 const db = firebase.database();
 const storage = firebase.storage(); // Firebase Storage 객체
 
+// 슬라이드 쇼 관련 변수 초기화
 let currentSlide = 0;
 const slides = document.querySelectorAll(".slide");
 const dots = document.querySelectorAll(".dot");
 const slideIntervalTime = 5000; // 5초마다 슬라이드 전환
 let slideInterval;
 
+// 슬라이드 쇼의 특정 슬라이드를 표시하는 함수
 function showSlide(index) {
   if (index >= slides.length) {
     currentSlide = 0;
@@ -26,27 +27,32 @@ function showSlide(index) {
   dots[currentSlide].classList.add("active");
 }
 
+// 슬라이드 쇼 자동 전환 시작
 function startSlideInterval() {
   slideInterval = setInterval(() => {
     showSlide(currentSlide + 1);
   }, slideIntervalTime);
 }
 
+// 슬라이드 쇼 자동 전환 초기화
 function resetSlideInterval() {
   clearInterval(slideInterval);
   startSlideInterval();
 }
 
+// 이전 슬라이드로 이동 버튼 클릭 이벤트 리스너
 document.querySelector(".prev").addEventListener("click", () => {
   showSlide(currentSlide - 1);
   resetSlideInterval();
 });
 
+// 다음 슬라이드로 이동 버튼 클릭 이벤트 리스너
 document.querySelector(".next").addEventListener("click", () => {
   showSlide(currentSlide + 1);
   resetSlideInterval();
 });
 
+// 슬라이드 점(dot)을 클릭하면 해당 슬라이드로 이동
 dots.forEach((dot, index) => {
   dot.addEventListener("click", () => {
     showSlide(index);
@@ -54,32 +60,39 @@ dots.forEach((dot, index) => {
   });
 });
 
+// 첫 슬라이드를 표시하고 자동 전환 시작
 showSlide(currentSlide);
 startSlideInterval();
 
+// 메뉴 아이콘 및 사이드바 관련 변수 초기화
 const menuIcon = document.getElementById("menu-icon");
 const sidebar = document.getElementById("sidebar");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 
+// 메뉴 아이콘 클릭 시 사이드바 표시
 menuIcon.addEventListener("click", () => {
   sidebar.classList.toggle("open");
   sidebarOverlay.classList.toggle("show");
 });
 
+// 사이드바 오버레이 클릭 시 사이드바 숨기기
 sidebarOverlay.addEventListener("click", () => {
   sidebar.classList.remove("open");
   sidebarOverlay.classList.remove("show");
 });
 
+// 프로필 이미지 업로드 관련 변수 초기화
 const profileImg = document.getElementById("profile-img");
 const profileUpload = document.getElementById("profile-upload");
 const uploadBtn = document.getElementById("upload-btn");
 const loadingSpinner = document.getElementById("loading-spinner");
 
+// 업로드 버튼 클릭 시 파일 선택 창 열기
 uploadBtn.addEventListener("click", () => {
   profileUpload.click();
 });
 
+// 파일 선택 시 프로필 이미지 업로드 함수 호출
 profileUpload.addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (file) {
@@ -87,6 +100,7 @@ profileUpload.addEventListener("change", (e) => {
   }
 });
 
+// 프로필 이미지 업로드 함수
 function uploadProfileImage(file) {
   const user = auth.currentUser;
   if (user) {
@@ -99,23 +113,21 @@ function uploadProfileImage(file) {
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        // 업로드 진행 상태를 표시할 수 있습니다 (옵션).
+        // 업로드 진행 상태를 표시 (옵션)
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log(`Upload is ${progress}% done`);
       },
       (error) => {
-        // 업로드 중 오류가 발생했습니다.
+        // 업로드 중 오류 발생 시 로딩 스피너 숨김
         console.error("Error uploading image:", error);
-        // 오류 발생 시 로딩 스피너 숨김
         loadingSpinner.style.display = "none";
       },
       () => {
-        // 업로드가 완료된 후 URL을 가져옵니다.
+        // 업로드 완료 후 URL 가져오기
         uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
           saveUserProfileImage(downloadURL);
           profileImg.src = downloadURL; // 프로필 이미지 업데이트
-          // 업로드 완료 시 로딩 스피너 숨김
           loadingSpinner.style.display = "none";
         });
       }
@@ -123,6 +135,7 @@ function uploadProfileImage(file) {
   }
 }
 
+// 업로드된 프로필 이미지 URL을 데이터베이스에 저장
 function saveUserProfileImage(imageUrl) {
   const user = auth.currentUser;
   if (user) {
@@ -141,6 +154,7 @@ function saveUserProfileImage(imageUrl) {
   }
 }
 
+// 사용자 프로필을 불러오는 함수
 function loadUserProfile() {
   const user = auth.currentUser;
   if (user) {
@@ -166,6 +180,7 @@ function loadUserProfile() {
   }
 }
 
+// 사용자 인증 상태 변경 시 프로필 불러오기
 auth.onAuthStateChanged((user) => {
   if (user) {
     loadUserProfile();
@@ -174,6 +189,7 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
+// 로그아웃 버튼 클릭 시 로그아웃 처리
 document.getElementById("logout-btn").addEventListener("click", () => {
   auth
     .signOut()
@@ -185,6 +201,14 @@ document.getElementById("logout-btn").addEventListener("click", () => {
     });
 });
 
+// 사이트 이동 기능 --------------------------------------------------------------
+
+// Reddit 페이지로 이동
 document.getElementById("Reddit").addEventListener("click", () => {
   window.location.href = "list.html";
+});
+
+// Office 페이지로 이동
+document.getElementById("office").addEventListener("click", () => {
+  window.location.href = "office.html";
 });
