@@ -1,5 +1,3 @@
-// list.js
-
 // Firebase 데이터베이스 및 인증 객체 생성
 const db = firebase.database();
 const boardsRef = db.ref("bulletinBoards");
@@ -88,8 +86,8 @@ function renderPagination(totalItems) {
 }
 
 // Search functionality
-document.getElementById("search").addEventListener("input", (e) => {
-  const query = e.target.value.toLowerCase();
+document.getElementById("search-button").addEventListener("click", () => {
+  const query = document.getElementById("search").value.toLowerCase();
   boardsRef.once("value", (snapshot) => {
     const boards = [];
     snapshot.forEach((childSnapshot) => {
@@ -124,6 +122,7 @@ sidebarOverlay.addEventListener("click", () => {
   sidebar.classList.remove("open");
   sidebarOverlay.classList.remove("show");
 });
+
 const profileImg = document.getElementById("profile-img");
 const profileUpload = document.getElementById("profile-upload");
 const uploadBtn = document.getElementById("upload-btn");
