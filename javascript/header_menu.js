@@ -166,6 +166,41 @@ document.getElementById("cpu").addEventListener("click", () => {
 document.getElementById("Case").addEventListener("click", () => {
   window.location.href = "case.html";
 });
+
+// Cooler 페이지로 이동
+document.getElementById("Cooler").addEventListener("click", () => {
+  window.location.href = "Cooler.html";
+});
+
+// HDD 페이지로 이동
+document.getElementById("HDD").addEventListener("click", () => {
+  window.location.href = "HDD.html";
+});
+
+// MBoard 페이지로 이동
+document.getElementById("MBoard").addEventListener("click", () => {
+  window.location.href = "MBoard.html";
+});
+
+// Power 페이지로 이동
+document.getElementById("Power").addEventListener("click", () => {
+  window.location.href = "Power.html";
+});
+
+// RAM 페이지로 이동
+document.getElementById("RAM").addEventListener("click", () => {
+  window.location.href = "RAM.html";
+});
+
+// SSD 페이지로 이동
+document.getElementById("SSD").addEventListener("click", () => {
+  window.location.href = "SSD.html";
+});
+
+// SSD 페이지로 이동
+document.getElementById("VGA").addEventListener("click", () => {
+  window.location.href = "VGA.html";
+});
 // 토글 요소 -------------------------------------------------
 
 document.addEventListener("DOMContentLoaded", function () {
