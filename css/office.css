@@ -1,8 +1,8 @@
 .container {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  grid-template-columns: 1fr 2fr; /* 비율을 변경하여 오른쪽 공간을 줄임 */
 }
+
 .form-section {
   grid-column: 1 / span 1;
 }
@@ -10,26 +10,46 @@
   grid-column: 2 / span 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  margin-right: 250px;
+
 }
 .recommendation-box {
   border: 1px solid #ccc;
   padding: 10px;
   height: auto;
   overflow-y: auto;
+ 
 }
+/* 테이블 스타일 */
 table {
   width: 100%;
   border-collapse: collapse;
+  font-family: "Ownglyph_meetme-Rg";
+  background-color: #1e1e1e; /* 테이블 배경색을 어두운 색으로 */
+  color: #ffffff; /* 텍스트 색상을 흰색으로 */
 }
-th,
-td {
+
+th, td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
 }
+
 th {
-  background-color: #f2f2f2;
+  background-color: #f05365; /* 헤더 배경색을 버튼과 동일하게 */
+  color: #ffffff; /* 헤더 텍스트 색상을 흰색으로 */
+}
+
+td {
+  background-color: #2e2e2e; /* 데이터 셀 배경색을 조금 더 어두운 색으로 */
+}
+
+table tr:nth-child(even) td {
+  background-color: #3e3e3e; /* 짝수 행 배경색을 약간 다르게 */
+}
+
+table tr:hover td {
+  background-color: #555555; /* 마우스 오버 시 배경색 */
 }
 
 main {
@@ -38,9 +58,12 @@ main {
 h1 {
   font-size: 40px;
   margin: 0;
+  font-family: "Ownglyph_meetme-Rg";
+  margin-left: 130px;
   cursor: pointer;
 }
-h2 {
+h2, h3 {
+  font-size: 30px;
   font-family: "Ownglyph_meetme-Rg";
 }
 
@@ -49,7 +72,6 @@ h2 {
   height: 300px;
   display: flex;
   align-items: center;
-
   margin: 20px;
 }
 
