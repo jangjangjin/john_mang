@@ -93,7 +93,8 @@
 
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <main>
-      <h1>사무용 PC 추천</h1>
+      <br/>
+      <h1>옵션 설정</h1>
       <div class="container">
         <div class="form-section">
           <div class="slider-container">
@@ -133,7 +134,6 @@
                 required
               >
                 <option value="ANY">상관없음</option>
-                <option value="AFOX">AFOX</option>
                 <option value="ASUS">ASUS</option>
                 <option value="COLORFUL">COLORFUL</option>
                 <option value="EVGA">EVGA</option>
@@ -149,8 +149,40 @@
               </select>
             </div>
             <div class="select-group">
-              <label for="memorySize">저장공간</label>
+              <label for="diskSize">SSD</label>
+              <select id="diskSize" name="diskSize" required>
+                <option value="0">상관없음</option>
+                <option value="1">250GB</option>
+                <option value="2">500GB</option>
+                <option value="3">1TB</option>
+                <option value="4">2TB</option>
+                <option value="5">4TB</option>
+                <option value="6">5TB 이상</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="select-group">
+              <label for="memorySize">메모리 크기</label>
               <select id="memorySize" name="memorySize" required>
+                <option value="ANY">상관없음</option>
+                <option value="8">8GB</option>
+                <option value="16">16GB</option>
+                <option value="32">32GB</option>
+                <option value="64">64GB</option>
+              </select>
+            </div>
+            <div class="select-group">
+              <label for="cooling">쿨링 방식</label>
+              <select id="cooling" name="cooling" required>
+                <option value="ANY">상관없음</option>
+                <option value="FAN">공랭</option>
+                <option value="WATER">수랭</option>
+              </select>
+            </div>
+            <div class="select-group">
+              <label for="hddSize">하드 디스크</label>
+              <select id="hddSize" name="hddSize" required>
                 <option value="0">상관없음</option>
                 <option value="1">250GB</option>
                 <option value="2">500GB</option>
@@ -162,8 +194,9 @@
             </div>
           </div>
           <br /><br /><br />
-          <button type="submit">추천 받기</button>
+          <button type="submit" id="recommendButton">추천 받기</button>
           <div id="recommendationResult"></div>
+
         </div>
         <div class="recommendation-section">
           <div class="recommendation-box">
@@ -174,44 +207,44 @@
                 <th>가격</th>
               </tr>
               <tr>
-                <td>CPU</td>
-                <td>가격1</td>
+                <td id="cpu1"></td>
+                <td id="cpuPrice1"></td>
               </tr>
               <tr>
-                <td>쿨러</td>
-                <td>가격2</td>
+                <td id="cooler1"></td>
+                <td id="coolerPrice1"></td>
               </tr>
               <tr>
-                <td>메인보드</td>
-                <td>가격3</td>
+                <td id="mboard1">메인보드</td>
+                <td id="mboardPrice1">가격3</td>
               </tr>
               <tr>
-                <td>메모리</td>
-                <td>가격4</td>
+                <td id="memory1">메모리</td>
+                <td id="memoryPrice1">가격4</td>
               </tr>
               <tr>
-                <td>그래픽카드</td>
-                <td>가격5</td>
+                <td id="gpu1">그래픽카드</td>
+                <td id="gpuPrice1">가격5</td>
               </tr>
               <tr>
-                <td>SSD</td>
-                <td>가격6</td>
+                <td id="ssd1">SSD</td>
+                <td id="ssdPrice1">가격6</td>
               </tr>
               <tr>
-                <td>HDD</td>
-                <td>가격7</td>
+                <td id="hdd1">HDD</td>
+                <td id="hddPrice1">가격7</td>
               </tr>
               <tr>
-                <td>케이스</td>
-                <td>가격8</td>
+                <td id="case1">케이스</td>
+                <td id="casePrice1">가격8</td>
               </tr>
               <tr>
-                <td>파워</td>
-                <td>가격9</td>
+                <td id="power1">파워</td>
+                <td id="powerPrice1">가격9</td>
               </tr>
               <tr>
-                <td>총합</td>
-                <td>총가격1</td>
+                <td id="total1">총 합계금액</td>
+                <td id="totalPrice1">총가격1</td>
               </tr>
             </table>
           </div>
@@ -223,12 +256,12 @@
                 <th>가격</th>
               </tr>
               <tr>
-                <td>CPU</td>
-                <td>가격1</td>
+                <td id="cpu2"></td>
+                <td id="cpuPrice2"></td>
               </tr>
               <tr>
-                <td>쿨러</td>
-                <td>가격2</td>
+                <td id="cooler2"></td>
+                <td id="coolerPrice2"></td>
               </tr>
               <tr>
                 <td>메인보드</td>
@@ -239,8 +272,8 @@
                 <td>가격4</td>
               </tr>
               <tr>
-                <td>그래픽카드</td>
-                <td>가격5</td>
+                <td id="gpu2"></td>
+                <td id="gpuPrice2"></td>
               </tr>
               <tr>
                 <td>SSD</td>
@@ -259,8 +292,8 @@
                 <td>가격9</td>
               </tr>
               <tr>
-                <td>총합</td>
-                <td>총가격2</td>
+                <td id="total2">총 합계금액</td>
+                <td id="totalPrice2"></td>
               </tr>
             </table>
           </div>
@@ -272,12 +305,12 @@
                 <th>가격</th>
               </tr>
               <tr>
-                <td>CPU</td>
-                <td>가격1</td>
+                <td id="cpu3"></td>
+                <td id="cpuPrice3"></td>
               </tr>
               <tr>
-                <td>쿨러</td>
-                <td>가격2</td>
+                <td id="cooler3"></td>
+                <td id="coolerPrice3"></td>
               </tr>
               <tr>
                 <td>메인보드</td>
@@ -288,8 +321,8 @@
                 <td>가격4</td>
               </tr>
               <tr>
-                <td>그래픽카드</td>
-                <td>가격5</td>
+                <td id="gpu3">그래픽카드</td>
+                <td id="gpuPrice3">가격5</td>
               </tr>
               <tr>
                 <td>SSD</td>
@@ -308,8 +341,8 @@
                 <td>가격9</td>
               </tr>
               <tr>
-                <td>총합</td>
-                <td>총가격3</td>
+                <td id="total3">총 합계금액</td>
+                <td id="totalPrice3"></td>
               </tr>
             </table>
           </div>
@@ -321,12 +354,12 @@
                 <th>가격</th>
               </tr>
               <tr>
-                <td>CPU</td>
-                <td>가격1</td>
+                <td id="cpu4"></td>
+                <td id="cpuPrice4"></td>
               </tr>
               <tr>
-                <td>쿨러</td>
-                <td>가격2</td>
+                <td id="cooler4"></td>
+                <td id="coolerPrice4"></td>
               </tr>
               <tr>
                 <td>메인보드</td>
@@ -337,8 +370,8 @@
                 <td>가격4</td>
               </tr>
               <tr>
-                <td>그래픽카드</td>
-                <td>가격5</td>
+                <td id="gpu4">그래픽카드</td>
+                <td id="gpuPrice4">가격5</td>
               </tr>
               <tr>
                 <td>SSD</td>
@@ -357,11 +390,12 @@
                 <td>가격9</td>
               </tr>
               <tr>
-                <td>총합</td>
-                <td>총가격4</td>
+                <td id="total4">총 합계금액</td>
+                <td id="totalPrice4">총가격4</td>
               </tr>
             </table>
           </div>
+          
         </div>
       </div>
     </main>
