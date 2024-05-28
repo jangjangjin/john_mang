@@ -31,6 +31,10 @@ function displayCpuData(data) {
     priceCell.textContent = MBoard["가격"];
     row.appendChild(priceCell);
 
+    const socketCell = document.createElement("td");
+    socketCell.textContent = MBoard["소켓"];
+    row.appendChild(socketCell);
+
     tableBody.appendChild(row);
   });
 }
