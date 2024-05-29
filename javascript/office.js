@@ -1,101 +1,77 @@
-let socketMemorySpecs = [];
 document.addEventListener('DOMContentLoaded', () => {
   // Firebase 초기화
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   } else {
-    firebase.app(); // 이미 초기화된 앱 사용
+    firebase.app();
   }
 
   const db = firebase.database();
-
   const budgetSlider = document.getElementById('budgetSlider');
   const labels = document.querySelectorAll('.label');
   const cpuBrandSelect = document.getElementById('cpuBrand');
   const recommendButton = document.getElementById('recommendButton');
   const recommendationResult = document.getElementById('recommendationResult');
-
-  // 소켓과 메모리 규격을 저장할 배열
+  const preferredManufacturerSelect = document.getElementById('preferredManufacturer');
   const socketMemorySpecs = [];
+  const memorySpecs = [];
 
-  if (budgetSlider) {
-    budgetSlider.value = "0"; // 기본값을 ~50만원으로 설정
-    updateActiveLabel(budgetSlider.value); // 라벨 업데이트
-  }
-  if (budgetSlider) {
-    budgetSlider.addEventListener('input', () => {
+  let totalCosts = [0, 0, 0, 0];
+
+  budgetSlider.value = "0"; // 기본값 설정
+  updateActiveLabel(budgetSlider.value);
+
+  budgetSlider.addEventListener('input', () => updateActiveLabel(budgetSlider.value));
+
+  labels.forEach(label => {
+    label.addEventListener('click', () => {
+      budgetSlider.value = label.getAttribute('data-value');
       updateActiveLabel(budgetSlider.value);
     });
-  }
+  });
 
-  if (labels) {
-    labels.forEach(label => {
-      label.addEventListener('click', () => {
-        const value = label.getAttribute('data-value');
-        budgetSlider.value = value;
-        updateActiveLabel(value);
-      });
-    });
-  }
-
-  if (cpuBrandSelect) {
-    cpuBrandSelect.addEventListener('change', () => {
-      // 값이 변경될 때는 데이터를 가져오지 않습니다.
-    });
-  }
-
-  if (recommendButton) {
-    recommendButton.addEventListener('click', () => {
-      if (!budgetSlider.value) {
-        alert("금액 선택은 필수입니다.");
-        return;
-      }else
-        fetchAndDisplayCpuData(budgetSlider.value, cpuBrandSelect.value);
-        fetchAndDisplayCoolerData(budgetSlider.value);
-    });
-  }
+  recommendButton.addEventListener('click', () => {
+    if (!budgetSlider.value) {
+      alert("금액 선택은 필수입니다.");
+      return;
+    }
+    fetchAndDisplayCpuData(budgetSlider.value, cpuBrandSelect.value);
+    fetchAndDisplayCoolerData(budgetSlider.value);
+    fetchAndDisplayMboardData(budgetSlider.value, preferredManufacturerSelect.value);
+    fetchAndDisplayRAMData(budgetSlider.value);
+  });
 
   function updateActiveLabel(value) {
     labels.forEach(label => {
-      if (label.getAttribute('data-value') == value) {
-        label.classList.add('active');
-      } else {
-        label.classList.remove('active');
-      }
+      label.classList.toggle('active', label.getAttribute('data-value') == value);
     });
   }
 
   function fetchAndDisplayCpuData(value, brand) {
     const cpuRef = db.ref("부품/0/CPU");
-    cpuRef.once("value", (snapshot) => {
-        const cpus = snapshot.val();
+    cpuRef.once("value", snapshot => {
+      const cpus = snapshot.val();
+      if (cpus) {
+        const { cpuminPrice, cpumaxPrice } = getCpuPriceLimitsByValue(value);
+        const filteredCpus = Object.values(cpus).filter(cpu => {
+          const cpuPrice = parseInt(cpu["가격"].replace(/,/g, ""), 10);
+          const isBrandMatch = brand === 'ANY' || cpu["제조사"] === brand;
+          const isGraphicsMatch = ["0", "1", "2"].includes(value) ? cpu["내장그래픽 여부"] === "O" : cpu["내장그래픽 여부"] === "X";
+          return cpuPrice >= cpuminPrice && cpuPrice <= cpumaxPrice && isBrandMatch && isGraphicsMatch;
+        });
 
-        if (cpus) {
-            const { cpuminPrice, cpumaxPrice } = getCpuPriceLimitsByValue(value);
-            const filteredCpus = Object.values(cpus).filter(cpu => {
-                const cpuPrice = parseInt(cpu["가격"].replace(/,/g, ""), 10);
-                const isBrandMatch = brand === 'ANY' || cpu["제조사"] === brand;
-                const isGraphicsMatch = ["0", "1", "2"].includes(value) && cpu["내장그래픽 여부"] === "O";            
-                const isNoGraphicsMatch = !["0", "1", "2"].includes(value) && cpu["내장그래픽 여부"] === "X";
-                return cpuPrice >= cpuminPrice && cpuPrice <= cpumaxPrice && isBrandMatch && (isGraphicsMatch || isNoGraphicsMatch);
-            });
-  
-              if (filteredCpus.length > 0) {
-                  const randomCpus = getRandomElements(filteredCpus, 4);
-                  // 소켓과 메모리 규격을 저장
-                  //socketMemorySpecs.length = 0; // 초기화
-                  totalCosts = [0, 0, 0, 0]; // 각 견적 상자의 부품 가격 총 합을 저장하는 배열
-                  randomCpus.forEach(cpu => {
-                      socketMemorySpecs.push({ socket: cpu["소켓"], memory: cpu["메모리 규격"], innerGraphic: cpu["내장그래픽 여부"] });
-                  });
-                  displayData(randomCpus); // CPU 데이터만 표시
-              } else {
-                  recommendationResult.innerHTML = '<p>적합한 CPU를 찾을 수 없습니다.</p>';
-              }
-          } else {
-              recommendationResult.innerHTML = '<p>CPU 데이터를 불러올 수 없습니다.</p>';
-          }
-      });
+        if (filteredCpus.length > 0) {
+          const randomCpus = getRandomElements(filteredCpus, 4);
+          totalCosts = [0, 0, 0, 0];
+          randomCpus.forEach(cpu => socketMemorySpecs.push({ socket: cpu["소켓"], memory: cpu["메모리 규격"], innerGraphic: cpu["내장그래픽 여부"] }));
+          displayData(randomCpus, "cpu");
+        } else {
+          recommendationResult.innerHTML = '<p>적합한 CPU를 찾을 수 없습니다.</p>';
+        }
+      } else {
+        recommendationResult.innerHTML = '<p>CPU 데이터를 불러올 수 없습니다.</p>';
+      }
+    });
   }
 
   function getCpuPriceLimitsByValue(value) {
@@ -108,25 +84,23 @@ document.addEventListener('DOMContentLoaded', () => {
       "5": { cpuminPrice: 300000, cpumaxPrice: 600000 }, // 200~240 만원대
       "6": { cpuminPrice: 500000, cpumaxPrice: 1000000 } // 250~350 만원대
     };
-
     return cpupriceLimits[value] || { cpuminPrice: 0, cpumaxPrice: 0 };
   }
 
-
   function fetchAndDisplayCoolerData(value) {
     const coolerRef = db.ref("부품/0/Cooler");
-    coolerRef.once("value", (snapshot) => {
-      const coolersData = snapshot.val();
-      if (coolersData) {
+    coolerRef.once("value", snapshot => {
+      const coolers = snapshot.val();
+      if (coolers) {
         const { minPrice, maxPrice } = getCoolerPriceLimitsByValue(value);
-        const filteredCoolers = Object.values(coolersData).filter(cooler => {
+        const filteredCoolers = Object.values(coolers).filter(cooler => {
           const coolerPrice = parseInt(cooler["가격"], 10);
           return coolerPrice >= minPrice && coolerPrice <= maxPrice;
         });
 
         if (filteredCoolers.length > 0) {
           const randomCoolers = getRandomElements(filteredCoolers, 4);
-          displayCoolerData(randomCoolers); // 쿨러 데이터를 표시하는 다른 함수 호출
+          displayData(randomCoolers, "cooler");
         } else {
           recommendationResult.innerHTML = '<p>적합한 쿨러를 찾을 수 없습니다.</p>';
         }
@@ -135,122 +109,204 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-  function getCoolerPriceLimitsByValue(value1){
-    const priceLimits ={
-    "0": { minPrice:10000, maxPrice: 23000}, //~ 50만원대
-    "1": { minPrice:20000, maxPrice: 40000},
-    "2": { minPrice:29000, maxPrice: 60000},
-    "3": { minPrice:29000, maxPrice: 80000},
-    "4": { minPrice:29000, maxPrice: 80000},
-    "5": { minPrice:29000, maxPrice: 100000},
-    "6": { minPrice:38000, maxPrice: 1000000}
+
+  function getCoolerPriceLimitsByValue(value) {
+    const priceLimits = {
+      "0": { minPrice: 10000, maxPrice: 23000 }, // ~50만원대
+      "1": { minPrice: 20000, maxPrice: 40000 },
+      "2": { minPrice: 29000, maxPrice: 60000 },
+      "3": { minPrice: 29000, maxPrice: 80000 },
+      "4": { minPrice: 29000, maxPrice: 80000 },
+      "5": { minPrice: 29000, maxPrice: 100000 },
+      "6": { minPrice: 38000, maxPrice: 1000000 }
     };
-    return priceLimits[value1] || {minPrice: 0, maxPrice: 0};
-    }
-    
-    function getRandomElements(array, count) {
+    return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
+  }
+
+  function fetchAndDisplayMboardData(value, preferredManufacturer) {
+    const mboardRef = db.ref("부품/0/MBoard");
+    mboardRef.once("value", snapshot => {
+      const mboards = snapshot.val();
+      if (mboards) {
+        const { minPrice, maxPrice } = getMboardPriceLimitsByValue(value);
+        const filteredMboards = Object.values(mboards).filter(mboard => {
+          const mboardPrice = parseInt(mboard["가격"].replace(/,/g, ""), 10);
+          const matchesSpecs = socketMemorySpecs.some(spec => spec.socket === mboard["소켓"] && spec.memory === mboard["메모리 규격"]);
+          const isManufacturerMatch = preferredManufacturer === 'ANY' || mboard["제조사"] === preferredManufacturer;
+          return mboardPrice >= minPrice && mboardPrice <= maxPrice && matchesSpecs && isManufacturerMatch;
+        });
+
+        if (filteredMboards.length > 0) {
+          const randomMboards = getRandomElements(filteredMboards, 4);
+          randomMboards.forEach(mboard => memorySpecs.push({memory: mboard["메모리 규격"]}));
+          displayData(randomMboards, "mboard");
+        } else {
+          recommendationResult.innerHTML = '<p>적합한 메인보드를 찾을 수 없습니다.</p>';
+        }
+      } else {
+        recommendationResult.innerHTML = '<p>메인보드 데이터를 불러올 수 없습니다.</p>';
+      }
+    });
+  }
+
+  function getMboardPriceLimitsByValue(value) {
+    const priceLimits = {
+      "0": { minPrice: 70000, maxPrice: 100000 }, // ~50만원대
+      "1": { minPrice: 150000, maxPrice: 170000 },
+      "2": { minPrice: 160000, maxPrice: 200000 },
+      "3": { minPrice: 160000, maxPrice: 200000 },
+      "4": { minPrice: 160000, maxPrice: 300000 },
+      "5": { minPrice: 160000, maxPrice: 300000 },
+      "6": { minPrice: 200000, maxPrice: 1000000 }
+    };
+    return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
+  }
+  function fetchAndDisplayRAMData(value) {
+    const ramRef = db.ref("부품/0/RAM");
+    ramRef.once("value", snapshot => {
+        const rams = snapshot.val();
+        if (rams) {
+            const { minPrice, maxPrice } = getRAMPriceLimitsByValue(value);
+            const filteredRams = Object.values(rams).filter(ram => {
+                const ramPrice = parseInt(ram["가격"].replace(/,/g, ""), 10);
+                let isPriceMatch = false;
+
+                if (value === "0" && ram["Name"].includes("(8GB)") && ramPrice >= minPrice && ramPrice <= maxPrice) {
+                    isPriceMatch = true;
+                } else if (value === "1" && ram["Name"].includes("(16GB)") && ramPrice >= minPrice && ramPrice <= maxPrice) {
+                    isPriceMatch = true;
+                } else if (value === "1" && ram["용량"] === "16GB" && ramPrice >= minPrice && ramPrice <= maxPrice) {
+                    isPriceMatch = true;
+                } else if (value === "1" && ram["용량"] === "4GB" && ramPrice >= minPrice && ramPrice <= maxPrice) {
+                    isPriceMatch = true;
+                } else if (ramPrice >= minPrice && ramPrice <= maxPrice) {
+                    isPriceMatch = true;
+                }
+
+                return isPriceMatch;
+            });
+
+            if (filteredRams.length > 0) {
+                const matched8GBRams = filteredRams.filter(ram => ram["Name"].includes("(8GB)"));
+                const matched16GBRams = filteredRams.filter(ram => ram["Name"].includes("(16GB)") || ram["Name"].includes("(16Gx2)"));
+                const matched4GBRams = filteredRams.filter(ram => ram["용량"] === "4GB");
+
+                matched8GBRams.forEach(ram => {
+                    ram["Name"] += "x2";
+                    ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 2; // 8GB RAM의 경우 가격을 2배로 수정
+                });
+
+                matched16GBRams.forEach(ram => {
+                    if (!ram["Name"].includes("x2")) {
+                        ram["Name"] += "x2";
+                    }
+                    ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 2; // 16GB RAM의 경우 가격을 2배로 수정
+                });
+
+                matched4GBRams.forEach(ram => {
+                    ram["Name"] += "x4";
+                    ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 4; // 4GB RAM의 경우 가격을 4배로 수정
+                });
+
+                const randomRams = getRandomElements([...matched8GBRams, ...matched16GBRams, ...matched4GBRams], 4);
+                displayData(randomRams, "ram");
+            } else {
+                recommendationResult.innerHTML = '<p>적합한 메모리를 찾을 수 없습니다.</p>';
+            }
+        } else {
+            recommendationResult.innerHTML = '<p>메모리 데이터를 불러올 수 없습니다.</p>';
+        }
+    });
+}
+
+function getRAMPriceLimitsByValue(value) {
+    const priceLimits = {
+        "0": { minPrice: 15000, maxPrice: 30000 },
+        "1": { minPrice: 30000, maxPrice: 70000 },
+        "2": { minPrice: 30000, maxPrice: 70000 },
+        "3": { minPrice: 60000, maxPrice: 100000 },
+        "4": { minPrice: 60000, maxPrice: 150000 },
+        "5": { minPrice: 100000, maxPrice: 200000 },
+        "6": { minPrice: 100000, maxPrice: 300000 }
+    };
+    return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
+}
+
+
+function getRAMPriceLimitsByValue(value) {
+    const priceLimits = {
+        "0": { minPrice: 15000, maxPrice: 30000 },
+        "1": { minPrice: 30000, maxPrice: 70000 },
+        "2": { minPrice: 30000, maxPrice: 70000 }, 
+        "3": { minPrice: 60000, maxPrice: 100000 },
+        "4": { minPrice: 60000, maxPrice: 150000 },
+        "5": { minPrice: 100000, maxPrice: 200000 },
+        "6": { minPrice: 100000, maxPrice: 300000 }
+    };
+    return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
+}
+
+  
+  function getRandomElements(array, count) {
     const shuffled = array.slice();
     let i = array.length;
     const min = i - count;
     let temp, index;
     while (i-- > min) {
-    index = Math.floor((i + 1) * Math.random());
-    temp = shuffled[index];
-    shuffled[index] = shuffled[i];
-    shuffled[i] = temp;
+      index = Math.floor((i + 1) * Math.random());
+      temp = shuffled[index];
+      shuffled[index] = shuffled[i];
+      shuffled[i] = temp;
     }
     return shuffled.slice(min);
-    }
-    
-    function displayData(cpus) {
-    const cpuElements = [
-    { name: "cpu1", price: "cpuPrice1" },
-    { name: "cpu2", price: "cpuPrice2" },
-    { name: "cpu3", price: "cpuPrice3" },
-    { name: "cpu4", price: "cpuPrice4" }
+  }
+  function displayData(items, type) {
+    const elements = [
+        { name: `${type}1`, price: `${type}Price1` },
+        { name: `${type}2`, price: `${type}Price2` },
+        { name: `${type}3`, price: `${type}Price3` },
+        { name: `${type}4`, price: `${type}Price4` }
     ];
-    // CPU 데이터 표시
-cpuElements.forEach((element, index) => {
-  const cpu = cpus[index]; // cpus 배열에서 CPU를 가져옴
-  const cpuElement = document.getElementById(element.name);
-  const cpuPriceElement = document.getElementById(element.price);
 
-  if (cpu) {
-    if (cpuElement) {
-      cpuElement.textContent = `${cpu["Name"]}`;
-    }
+    elements.forEach((element, index) => {
+        const item = items[index];
+        const itemElement = document.getElementById(element.name);
+        const itemPriceElement = document.getElementById(element.price);
 
-    if (cpuPriceElement) {
-      const cpuPrice = parseInt(cpu["가격"].replace(/,/g, ""), 10);
-      cpuPriceElement.textContent = `${cpuPrice}원`;
-      totalCosts[index] += cpuPrice;
-    }
-  } else {
-    if (cpuElement) {
-      cpuElement.textContent = "적합한 CPU를 찾을 수 없습니다.";
-    }
+        if (itemElement && itemPriceElement) {
+            if (item) {
+                if (type === 'ram' && index === 0 && items.length === 1) {
+                    // 삼성전자 DDR4-3200 (8GB)를 찾은 경우
+                    itemElement.textContent = `${item["Name"]} x2`;
+                    const itemPrice = parseInt(String(item["가격"]).replace(/,/g, ""), 10) * 2;
+                    itemPriceElement.textContent = `${itemPrice}원`;
+                    totalCosts[index] += itemPrice;
+                } else {
+                    itemElement.textContent = item["이름"] || item["Name"];
+                    const itemPrice = parseInt(String(item["가격"]).replace(/,/g, ""), 10);
+                    itemPriceElement.textContent = `${itemPrice}원`;
+                    totalCosts[index] += itemPrice;
+                }
+            } else {
+                itemElement.textContent = `적합한 ${type === 'cpu' ? 'CPU' : (type === 'cooler' ? '쿨러' : (type === 'ram' ? '램' : '메인보드'))}를 찾을 수 없습니다.`;
+                itemPriceElement.textContent = "";
+            }
+        } else {
+            console.error(`Element with ID ${element.name} or ${element.price} not found.`);
+        }
+    });
 
-    if (cpuPriceElement) {
-      cpuPriceElement.textContent = "";
-    }
-  }
-});
-
-// 각 견적 상자의 부품 가격 총 합을 표시
-totalCosts.forEach((totalCost, index) => {
-  const totalElement = document.getElementById(`total${index + 1}`);
-  const totalPriceElement = document.getElementById(`totalPrice${index + 1}`);
-  if (totalElement && totalPriceElement) {
-    totalElement.textContent = "총 합계금액";
-    totalPriceElement.textContent = `${totalCost}원`;
-  }
-});
-
-// 추후 필요할 때를 위해 소켓과 메모리 규격 저장
-//console.log(socketMemorySpecs);
+    totalCosts.forEach((totalCost, index) => {
+        const totalElement = document.getElementById(`total${index + 1}`);
+        const totalPriceElement = document.getElementById(`totalPrice${index + 1}`);
+        if (totalElement && totalPriceElement) {
+            totalElement.textContent = "총 합계금액";
+            totalPriceElement.textContent = `${totalCost}원`;
+        } else {
+            console.error(`Element with ID total${index + 1} or totalPrice${index + 1} not found.`);
+        }
+    });
 }
-function displayCoolerData(coolersData) {
-  const coolerElements = [
-  { name: "cooler1", price: "coolerPrice1" },
-  { name: "cooler2", price: "coolerPrice2" },
-  { name: "cooler3", price: "coolerPrice3" },
-  { name: "cooler4", price: "coolerPrice4" }
-  ];
-  // 쿨러 데이터 표시
-coolerElements.forEach((element, index) => {
-  const cooler = coolersData[index]; // 배열에서 쿨러 데이터 가져오기
-  const coolerElement = document.getElementById(element.name);
-  const coolerPriceElement = document.getElementById(element.price);
 
-  if (cooler) {
-    if (coolerElement) {
-      coolerElement.textContent = `${cooler["이름"]}`;
-    }
-    if (coolerPriceElement) {
-      const coolerPrice = parseInt(cooler["가격"], 10);
-      coolerPriceElement.textContent = `${coolerPrice}원`;
-      totalCosts[index] += coolerPrice;
-    }
-  } else {
-    if (coolerElement) {
-      coolerElement.textContent = "적합한 쿨러를 찾을 수 없습니다.";
-    }
-
-    if (coolerPriceElement) {
-      coolerPriceElement.textContent = "";
-    }
-  }
+  
 });
-
-// 각 견적 상자의 부품 가격 총 합을 표시
-totalCosts.forEach((totalCost, index) => {
-  const totalElement = document.getElementById(`total${index + 1}`);
-  const totalPriceElement = document.getElementById(`totalPrice${index + 1}`);
-  if (totalElement && totalPriceElement) {
-    totalElement.textContent = "총 합계금액";
-    totalPriceElement.textContent = `${totalCost}원`;
-  }
-});
-}
-});
-
