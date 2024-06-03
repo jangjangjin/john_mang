@@ -31,14 +31,6 @@ function displayCpuData(data) {
     manufacturerCell.textContent = VGA["제조사"];
     row.appendChild(manufacturerCell);
 
-    const numCell = document.createElement("td");
-    numCell.textContent = VGA["넘버링"];
-    row.appendChild(numCell);
-
-    const powerCell = document.createElement("td");
-    powerCell.textContent = VGA["정격파워"];
-    row.appendChild(powerCell);
-
     const priceCell = document.createElement("td");
     priceCell.textContent = VGA["가격"];
     row.appendChild(priceCell);

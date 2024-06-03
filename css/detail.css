@@ -104,6 +104,7 @@ main {
   cursor: pointer;
   border-radius: 4px;
   font-size: 24px;
+  transition: background-color 0.3s ease;
 }
 
 #comment-form button:hover {
@@ -204,24 +205,71 @@ main {
 #edit-form textarea,
 #edit-form input[type="file"] {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 10px 0px;
+  margin-bottom: 15px;
   border: 1px solid #333;
   border-radius: 4px;
   background-color: #333;
   color: #ffffff;
 }
 
-#edit-form button {
-  background-color: #ffa500;
-  color: #ffffff;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
+#edit-form input[type="text"],
+#edit-form input[type="file"],
+#edit-form textarea {
+  font-size: 14px;
+  padding-left: 10px;
+  resize: none; /* 크기 조절 비활성화 */
+  box-sizing: border-box; /* 패딩과 보더가 전체 크기에 포함되도록 함 */
 }
+
+#edit-form button {
+  transition: background-color 0.3s ease;
+  font-size: 20px;
+  font-family: "Ownglyph_meetme-Rg";
+  padding: 7px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffa500;
+  color: #000000;
+  cursor: pointer;
+  text-align: center; /* 추가 */
+  display: block;
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+#edit-form button:hover {
+  background-color: #ff7f00; /* 호버 시 배경색을 더 진한 오렌지색으로 변경합니다. */
+}
+
 
 #edit-image-preview {
   max-width: 100%;
   margin-bottom: 10px;
+}
+
+#button-container {
+  display: flex;
+  justify-content: flex-end; /* 버튼을 오른쪽으로 정렬합니다. */
+  align-items: center; /* 요소를 수직으로 가운데 정렬합니다. */
+  flex-direction: row; /* flex-direction을 row로 설정하여 요소가 좌에서 우로 배치되도록 합니다. */
+  margin-top: 20px;
+}
+
+#edit-btn, #delete-btn {
+  float: right;
+  transition: background-color 0.3s ease;
+  font-size: 20px;
+  font-family: "Ownglyph_meetme-Rg";
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffa500;
+  color: #000000;
+  cursor: pointer;
+  text-align: center;
+  margin: 0 5px; /* 좌우 여백을 조절합니다. */
+}
+
+#edit-btn:hover, #delete-btn:hover {
+  background-color: #ff7f00; /* 호버 시 배경색을 더 진한 오렌지색으로 변경합니다. */
 }
