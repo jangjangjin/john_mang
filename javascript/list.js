@@ -1,8 +1,8 @@
-// list.js
-
-const db = firebase.database();
+// Firebase 데이터베이스 및 인증 객체 생성
 const boardsRef = db.ref("bulletinBoards");
 const usersRef = db.ref("사용자들");
+const storageRef = firebase.storage().ref(); // Firebase 스토리지에 대한 레퍼런스
+
 let currentPage = 1;
 const itemsPerPage = 10;
 
@@ -84,8 +84,8 @@ function renderPagination(totalItems) {
 }
 
 // Search functionality
-document.getElementById("search").addEventListener("input", (e) => {
-  const query = e.target.value.toLowerCase();
+document.getElementById("search-button").addEventListener("click", () => {
+  const query = document.getElementById("search").value.toLowerCase();
   boardsRef.once("value", (snapshot) => {
     const boards = [];
     snapshot.forEach((childSnapshot) => {

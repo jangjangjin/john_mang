@@ -1,0 +1,193 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* 비율을 변경하여 오른쪽 공간을 줄임 */
+}
+
+.form-section {
+  grid-column: 1 / span 1;
+}
+.recommendation-section {
+  grid-column: 2 / span 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin-right: 250px;
+
+}
+.recommendation-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+  height: auto;
+  overflow-y: auto;
+ 
+}
+/* 테이블 스타일 */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: "Ownglyph_meetme-Rg";
+  background-color: #1e1e1e; /* 테이블 배경색을 어두운 색으로 */
+  color: #ffffff; /* 텍스트 색상을 흰색으로 */
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f05365; /* 헤더 배경색을 버튼과 동일하게 */
+  color: #ffffff; /* 헤더 텍스트 색상을 흰색으로 */
+}
+
+td {
+  background-color: #2e2e2e; /* 데이터 셀 배경색을 조금 더 어두운 색으로 */
+}
+
+table tr:nth-child(even) td {
+  background-color: #3e3e3e; /* 짝수 행 배경색을 약간 다르게 */
+}
+
+table tr:hover td {
+  background-color: #555555; /* 마우스 오버 시 배경색 */
+}
+
+main {
+  margin-left: 50px;
+}
+h1 {
+  font-size: 40px;
+  margin: 0;
+  font-family: "Ownglyph_meetme-Rg";
+  margin-left: 130px;
+  cursor: pointer;
+}
+h2, h3 {
+  font-size: 30px;
+  font-family: "Ownglyph_meetme-Rg";
+}
+
+.slider-container {
+  width: 500px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+.labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  margin-right: 20px;
+  font-family: "Ownglyph_meetme-Rg";
+}
+
+.label {
+  font-size: 18px;
+  transition: color 0.2s, background-color 0.2s;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.label.active {
+  background-color: #f05365;
+  color: #ffffff;
+}
+
+.slider {
+  transform: rotate(-90deg);
+  width: 300px;
+  margin: 0 auto;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 8px;
+  background: #1e1e1e;
+  border-radius: 5px;
+  outline: none;
+  transition: background 0.3s;
+}
+
+.slider:hover {
+  background: linear-gradient(to right, #01e714, #07c1f0);
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  background-image: url("../imgs/rocket.png");
+  background-size: cover;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
+}
+.slider::-webkit-slider-thumb:hover {
+  background-image: url("../imgs/rocker.png");
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #4caf50;
+  cursor: pointer;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
+}
+
+.slider::-moz-range-thumb:hover {
+  background: #66bb6a;
+}
+label {
+  display: block;
+  margin-top: 20px;
+  font-family: "Ownglyph_meetme-Rg";
+}
+
+select {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 16px;
+  font-family: "Ownglyph_meetme-Rg";
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+select:focus {
+  outline: none;
+  border: 2px solid #f05365;
+}
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.select-group {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  width: 350px;
+  font-size: 30px;
+  padding: 10px 20px;
+  background-color: #f05365;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-family: "Ownglyph_meetme-Rg";
+  transition: background-color 0.3s;
+}
+button:hover {
+  background-color: #e71029;
+}

@@ -1,6 +1,13 @@
-/* list.css */
+/* styles.css */
 
-/* 사용할 폰트 설정 */
+@font-face {
+  font-family: "EF_jejudoldam";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @font-face {
   font-family: "Ownglyph_meetme-Rg";
   src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2")
@@ -9,46 +16,58 @@
   font-style: normal;
 }
 
-/* 전반적인 페이지 스타일 */
 body {
   font-family: Arial, sans-serif;
-  background-color: #121212;
-  color: #ffffff;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  background-color: #121212;
+  color: #ffffff;
 }
 
-/* 페이지 헤더 */
-header {
-  font-family: "Ownglyph_meetme-Rg";
-  background-color: #1e1e1e;
-  padding: 10px 20px;
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 24px;
+  padding: 10px 20px;
+  background-color: #1e1e1e;
+  color: #fff;
+  height: 35%;
 }
 
-h1 {
+.logo {
+  cursor: default;
+  font-family: "EF_jejudoldam";
+  font-weight: bold;
   font-size: 40px;
-  margin: 0;
+  text-align: center;
+  flex-grow: 1;
+}
+
+.menu-icon {
+  font-size: 24px;
   cursor: pointer;
 }
 
-/* 검색 입력 필드 */
-input[type="text"] {
-  padding: 5px;
-  border-radius: 4px;
-  border: 1px solid #333;
-  background-color: #333;
-  color: #ffffff;
+.search-bar {
+  cursor: default;
+  display: flex;
+  align-items: center;
 }
 
-/* 버튼 */
-button {
-  font-size: 20px;
+.search-bar input {
+  padding: 7.5px;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+}
+
+.search-bar button {
   font-family: "Ownglyph_meetme-Rg";
-  padding: 7px;
+  font-size: 20px;
+  padding: 4px 10px;
+  margin-left: 10px;
   border: none;
   border-radius: 4px;
   background-color: #ffa500;
@@ -56,12 +75,6 @@ button {
   cursor: pointer;
 }
 
-/* 메인 컨테이너 */
-main {
-  padding: 20px;
-}
-
-/*사이드 바*/
 nav.sidebar {
   position: fixed;
   top: 0;
@@ -194,15 +207,6 @@ nav.sidebar .submenu {
   animation: slideFromTop 0.5s ease forwards; /* 페이드인 애니메이션 */
 }
 
-/* list.css */
-nav.sidebar.open {
-  left: 0; /* 왼쪽에서 0으로 설정하여 화면에 나타나게 합니다 */
-}
-
-.sidebar-overlay.show {
-  display: block;
-}
-
 @keyframes slideFromTop {
   from {
     opacity: 0;
@@ -255,95 +259,30 @@ nav.sidebar .submenu-item > a {
   }
 }
 
-/* 게시판 헤더 및 항목 스타일 */
-#board-header,
-.board-item {
-  cursor: default;
-  display: flex;
-  justify-content: space-between;
+.sidebar.open {
+  left: 0;
+}
+
+.sidebar-overlay.show {
+  display: block;
+}
+
+nav.sidebar #logout-btn {
   padding: 10px;
-  background-color: #1e1e1e;
-  border-bottom: 1px solid #333;
-}
-
-#board-header {
-  cursor: default;
-  font-size: 26px;
-  font-family: "Ownglyph_meetme-Rg";
-  font-weight: bold;
-  background-color: #333;
-}
-
-.board-header-item,
-.board-item div {
-  flex: 1;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.board-item h2 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin: 0;
-  padding: 0;
-}
-
-.board-item:hover {
-  background-color: #333;
-}
-
-/* 페이지네이션 스타일 */
-#pagination {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.page-link {
-  margin: 0 5px;
-  cursor: pointer;
-}
-
-.page-link.active {
-  font-weight: bold;
-}
-
-/* 추가 스타일 */
-.red-text {
-  color: red;
-}
-
-/* 검색 바 컨테이너 */
-.search-container {
-  text-align: center; /* 내부 요소들을 수평 중앙 정렬 */
-  margin: 20px auto; /* 위 아래 여백은 20px, 좌우는 자동으로 중앙 정렬 */
-  width: 50%; /* 필요에 따라 조절 가능 */
-}
-
-/* 검색 바 */
-.search-bar {
-  display: inline-block; /* 내부 요소를 가로로 정렬하기 위해 인라인 블록 요소로 설정 */
-}
-
-.search-bar input {
-  padding-top: 10px;
-  padding-bottom: 7px;
-  border: none;
-  border-radius: 4px;
-  background-color: #333;
+  margin: 20px 20px 35px 20px;
+  background-color: #d9534f;
   color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  align-self: center;
 }
 
-.search-bar button {
-  font-family: "Ownglyph_meetme-Rg";
-  font-size: 20px;
-  padding: 4px 10px;
-  margin-left: 2px;
-  border: none;
-  border-radius: 4px;
-  background-color: #ffa500;
-  color: #000000;
-  cursor: pointer;
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
