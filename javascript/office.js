@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const recommendButton = document.getElementById('recommendButton');
   const recommendationResult = document.getElementById('recommendationResult');
   const preferredManufacturerSelect = document.getElementById('preferredManufacturer');
+  const memorySizeSelect = document.getElementById('memorySize');
   const socketMemorySpecs = [];
   const memorySpecs = [];
 
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchAndDisplayCpuData(budgetSlider.value, cpuBrandSelect.value);
     fetchAndDisplayCoolerData(budgetSlider.value);
     fetchAndDisplayMboardData(budgetSlider.value, preferredManufacturerSelect.value);
-    fetchAndDisplayRAMData(budgetSlider.value);
+    fetchAndDisplayRAMData(budgetSlider.value, memorySizeSelect.value);
   });
 
   function updateActiveLabel(value) {
@@ -161,90 +162,74 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
   }
-  function fetchAndDisplayRAMData(value) {
+
+  function fetchAndDisplayRAMData(value, memorySize) {
     const ramRef = db.ref("부품/0/RAM");
     ramRef.once("value", snapshot => {
-        const rams = snapshot.val();
-        if (rams) {
-            const { minPrice, maxPrice } = getRAMPriceLimitsByValue(value);
-            const filteredRams = Object.values(rams).filter(ram => {
-                const ramPrice = parseInt(ram["가격"].replace(/,/g, ""), 10);
-                let isPriceMatch = false;
+      const rams = snapshot.val();
+      if (rams) {
+        const { minPrice, maxPrice } = getRAMPriceLimitsByValue(value);
+        const filteredRams = Object.values(rams).filter(ram => {
+          const ramPrice = parseInt(ram["가격"].replace(/,/g, ""), 10);
+          const isMemorySizeMatch = memorySize === "ANY" || parseInt(ram["용량"]) === parseInt(memorySize);
+          let isPriceMatch = false;
 
-                if (value === "0" && ram["Name"].includes("(8GB)") && ramPrice >= minPrice && ramPrice <= maxPrice) {
-                    isPriceMatch = true;
-                } else if (value === "1" && ram["Name"].includes("(16GB)") && ramPrice >= minPrice && ramPrice <= maxPrice) {
-                    isPriceMatch = true;
-                } else if (value === "1" && ram["용량"] === "16GB" && ramPrice >= minPrice && ramPrice <= maxPrice) {
-                    isPriceMatch = true;
-                } else if (value === "1" && ram["용량"] === "4GB" && ramPrice >= minPrice && ramPrice <= maxPrice) {
-                    isPriceMatch = true;
-                } else if (ramPrice >= minPrice && ramPrice <= maxPrice) {
-                    isPriceMatch = true;
-                }
+          if (value === "0" && ram["Name"].includes("(8GB)") && ramPrice >= minPrice && ramPrice <= maxPrice) {
+            isPriceMatch = true;
+          } else if (value === "1" && (ram["Name"].includes("(16GB)") || ram["Name"].includes("(16Gx2)")) && ramPrice >= minPrice && ramPrice <= maxPrice) {
+            isPriceMatch = true;
+          } else if (isMemorySizeMatch && ramPrice >= minPrice && ramPrice <= maxPrice) {
+            isPriceMatch = true;
+          }
 
-                return isPriceMatch;
-            });
+          return isPriceMatch;
+        });
 
-            if (filteredRams.length > 0) {
-                const matched8GBRams = filteredRams.filter(ram => ram["Name"].includes("(8GB)"));
-                const matched16GBRams = filteredRams.filter(ram => ram["Name"].includes("(16GB)") || ram["Name"].includes("(16Gx2)"));
-                const matched4GBRams = filteredRams.filter(ram => ram["용량"] === "4GB");
+        if (filteredRams.length > 0) {
+          const matched8GBRams = filteredRams.filter(ram => ram["Name"].includes("(8GB)"));
+          const matched16GBRams = filteredRams.filter(ram => ram["Name"].includes("(16GB)") || ram["Name"].includes("(16Gx2)"));
+          const matched4GBRams = filteredRams.filter(ram => parseInt(ram["용량"]) === 4);
 
-                matched8GBRams.forEach(ram => {
-                    ram["Name"] += "x2";
-                    ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 2; // 8GB RAM의 경우 가격을 2배로 수정
-                });
+          matched8GBRams.forEach(ram => {
+            ram["Name"] += "x2";
+            ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 2; // 8GB RAM의 경우 가격을 2배로 수정
+          });
 
-                matched16GBRams.forEach(ram => {
-                    if (!ram["Name"].includes("x2")) {
-                        ram["Name"] += "x2";
-                    }
-                    ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 2; // 16GB RAM의 경우 가격을 2배로 수정
-                });
-
-                matched4GBRams.forEach(ram => {
-                    ram["Name"] += "x4";
-                    ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 4; // 4GB RAM의 경우 가격을 4배로 수정
-                });
-
-                const randomRams = getRandomElements([...matched8GBRams, ...matched16GBRams, ...matched4GBRams], 4);
-                displayData(randomRams, "ram");
-            } else {
-                recommendationResult.innerHTML = '<p>적합한 메모리를 찾을 수 없습니다.</p>';
+          matched16GBRams.forEach(ram => {
+            if (!ram["Name"].includes("x2")) {
+              ram["Name"] += "x2";
             }
+            ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 2; // 16GB RAM의 경우 가격을 2배로 수정
+          });
+
+          matched4GBRams.forEach(ram => {
+            ram["Name"] += "x4";
+            ram["가격"] = parseInt(ram["가격"].replace(/,/g, ""), 10) * 4; // 4GB RAM의 경우 가격을 4배로 수정
+          });
+
+          const randomRams = getRandomElements([...matched8GBRams, ...matched16GBRams, ...matched4GBRams], 4);
+          displayData(randomRams, "ram");
         } else {
-            recommendationResult.innerHTML = '<p>메모리 데이터를 불러올 수 없습니다.</p>';
+          recommendationResult.innerHTML = '<p>적합한 메모리를 찾을 수 없습니다.</p>';
         }
+      } else {
+        recommendationResult.innerHTML = '<p>메모리 데이터를 불러올 수 없습니다.</p>';
+      }
     });
-}
+  }
 
-function getRAMPriceLimitsByValue(value) {
+  function getRAMPriceLimitsByValue(value) {
     const priceLimits = {
-        "0": { minPrice: 15000, maxPrice: 30000 },
-        "1": { minPrice: 30000, maxPrice: 70000 },
-        "2": { minPrice: 30000, maxPrice: 70000 },
-        "3": { minPrice: 60000, maxPrice: 100000 },
-        "4": { minPrice: 60000, maxPrice: 150000 },
-        "5": { minPrice: 100000, maxPrice: 200000 },
-        "6": { minPrice: 100000, maxPrice: 300000 }
+      "0": { minPrice: 15000, maxPrice: 30000 },
+      "1": { minPrice: 30000, maxPrice: 70000 },
+      "2": { minPrice: 30000, maxPrice: 70000 },
+      "3": { minPrice: 60000, maxPrice: 100000 },
+      "4": { minPrice: 60000, maxPrice: 150000 },
+      "5": { minPrice: 100000, maxPrice: 200000 },
+      "6": { minPrice: 100000, maxPrice: 300000 }
     };
     return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
-}
-
-
-function getRAMPriceLimitsByValue(value) {
-    const priceLimits = {
-        "0": { minPrice: 15000, maxPrice: 30000 },
-        "1": { minPrice: 30000, maxPrice: 70000 },
-        "2": { minPrice: 30000, maxPrice: 70000 }, 
-        "3": { minPrice: 60000, maxPrice: 100000 },
-        "4": { minPrice: 60000, maxPrice: 150000 },
-        "5": { minPrice: 100000, maxPrice: 200000 },
-        "6": { minPrice: 100000, maxPrice: 300000 }
-    };
-    return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
-}
+  }
 
   
   function getRandomElements(array, count) {
@@ -276,7 +261,7 @@ function getRAMPriceLimitsByValue(value) {
         if (itemElement && itemPriceElement) {
             if (item) {
                 if (type === 'ram' && index === 0 && items.length === 1) {
-                    // 삼성전자 DDR4-3200 (8GB)를 찾은 경우
+                
                     itemElement.textContent = `${item["Name"]} x2`;
                     const itemPrice = parseInt(String(item["가격"]).replace(/,/g, ""), 10) * 2;
                     itemPriceElement.textContent = `${itemPrice}원`;
@@ -305,8 +290,7 @@ function getRAMPriceLimitsByValue(value) {
         } else {
             console.error(`Element with ID total${index + 1} or totalPrice${index + 1} not found.`);
         }
+        
     });
-}
-
-  
+  }
 });
