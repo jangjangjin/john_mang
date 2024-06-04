@@ -1,5 +1,14 @@
 /* create.css */
 
+/* 사용할 폰트 설정 */
+@font-face {
+  font-family: "Ownglyph_meetme-Rg";
+  src: url("https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2402_1@1.0/Ownglyph_meetme-Rg.woff2")
+    format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   font-family: Arial, sans-serif;
   background-color: #121212;
@@ -11,7 +20,7 @@ body {
 header {
   background-color: #1e1e1e;
   color: #ffffff;
-  padding: 10px 20px;
+  padding: 20px 0;
   text-align: center;
 }
 
@@ -20,27 +29,52 @@ main {
 }
 
 form {
+  max-width: 50%;
+  margin: 0 auto;
   background-color: #1e1e1e;
   padding: 20px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 form input,
-form textarea,
-form button {
+form textarea {
   width: 100%;
-  margin-bottom: 10px;
   padding: 10px;
-  border: 1px solid #333;
-  border-radius: 4px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
   background-color: #333;
   color: #ffffff;
 }
 
+form textarea,
+form input[type="text"],
+form input[type="file"] { /* 특정한 input type에만 스타일을 적용하기 위해 속성 선택자 사용 */
+  padding-right: 1px; /* 오른쪽 패딩 추가 */
+  font-size: 14px;
+}
+
+form textarea {
+  height: 150px;
+  resize: none; /* 사용자가 textarea 크기를 조정하지 못하도록 설정 */
+}
+
 form button {
-  background-color: #ffa500;
-  color: #ffffff;
-  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 20px;
+  font-family: "Ownglyph_meetme-Rg";
+  padding: 7px;
   border: none;
+  border-radius: 4px;
+  background-color: #ffa500;
+  color: #000000;
+  cursor: pointer;
+  text-align: center; /* 추가 */
+  display: block;
+  margin: 0 auto; /* 가운데 정렬 */
+}
+
+form button:hover {
+  background-color: #ff7f00;
 }
