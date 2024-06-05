@@ -246,4 +246,3 @@ totalCosts.forEach((totalCost, index) => {
 });
 }
 });
-
