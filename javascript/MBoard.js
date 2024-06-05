@@ -27,6 +27,18 @@ function displayCpuData(data) {
     nameCell.textContent = MBoard["이름"];
     row.appendChild(nameCell);
 
+    const manufacturerCell = document.createElement("td");
+    manufacturerCell.textContent = MBoard["제조사"];
+    row.appendChild(manufacturerCell);
+
+    const memoryCell = document.createElement("td");
+    memoryCell.textContent = MBoard["메모리 규격"];
+    row.appendChild(memoryCell);
+
+    const socketCell = document.createElement("td");
+    socketCell.textContent = MBoard["소켓"];
+    row.appendChild(socketCell);
+
     const priceCell = document.createElement("td");
     priceCell.textContent = MBoard["가격"];
     row.appendChild(priceCell);
