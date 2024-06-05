@@ -11,15 +11,17 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin-right: 250px;
+  display: none;
 
 }
+
 .recommendation-box {
   border: 1px solid #ccc;
   padding: 10px;
   height: auto;
   overflow-y: auto;
- 
 }
+
 /* 테이블 스타일 */
 table {
   width: 100%;

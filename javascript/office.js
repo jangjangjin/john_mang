@@ -31,12 +31,15 @@ document.addEventListener('DOMContentLoaded', () => {
       updateActiveLabel(budgetSlider.value);
     });
   });
-
   recommendButton.addEventListener('click', () => {
     if (!budgetSlider.value) {
       alert("금액 선택은 필수입니다.");
       return;
     }
+    // recommendation-section을 보이게 하는 코드
+    const recommendationSection = document.querySelector('.recommendation-section');
+    recommendationSection.style.display = 'grid'; // 또는 'flex', 레이아웃에 따라 다를 수 있음
+  
     fetchAndDisplayCpuData(budgetSlider.value, cpuBrandSelect.value);
     fetchAndDisplayCoolerData(budgetSlider.value);
     fetchAndDisplayMboardData(budgetSlider.value, preferredManufacturerSelect.value);
@@ -45,13 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
       fetchAndDisplayVgaData(budgetSlider.value, preferredManufacturerSelect.value);
     }
   });
-
+  
   function updateActiveLabel(value) {
     labels.forEach(label => {
       label.classList.toggle('active', label.getAttribute('data-value') == value);
     });
   }
-
+  
   function fetchAndDisplayCpuData(value, brand) {
     const cpuRef = db.ref("부품/0/CPU");
     cpuRef.once("value", snapshot => {
@@ -249,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
           const isManufacturerMatch = preferredManufacturer === 'ANY' || vga["제조사"] === preferredManufacturer;
           return vgaPrice >= minPrice && vgaPrice <= maxPrice && isManufacturerMatch;
         });
-
         if (filteredVgas.length > 0) {
           const randomVgas = getRandomElements(filteredVgas, 4);
           displayData(randomVgas, "vga");
