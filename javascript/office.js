@@ -1,3 +1,15 @@
+// 로딩창
+
+// 로딩 창 표시 함수
+function showLoading() {
+  document.getElementById("loading").style.display = "flex";
+}
+
+// 로딩 창 숨기기 함수
+function hideLoading() {
+  document.getElementById("loading").style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   // Firebase 초기화
   if (!firebase.apps.length) {
@@ -36,29 +48,37 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
   recommendButton.addEventListener("click", () => {
+    showLoading();
     if (!budgetSlider.value) {
+      hideLoading();
       alert("금액 선택은 필수입니다.");
+
       return;
     }
+
     // recommendation-section을 보이게 하는 코드
     const recommendationSection = document.querySelector(
       ".recommendation-section"
     );
-    recommendationSection.style.display = "grid"; // 또는 'flex', 레이아웃에 따라 다를 수 있음
 
-    fetchAndDisplayCpuData(budgetSlider.value, cpuBrandSelect.value);
-    fetchAndDisplayCoolerData(budgetSlider.value);
-    fetchAndDisplayMboardData(
-      budgetSlider.value,
-      preferredManufacturerSelect.value
-    );
-    fetchAndDisplayRAMData(budgetSlider.value, memorySizeSelect.value);
-    if (budgetSlider.value >= 2) {
-      fetchAndDisplayVgaData(
+    setTimeout(() => {
+      recommendationSection.style.display = "grid"; // 또는 'flex', 레이아웃에 따라 다를 수 있음
+
+      fetchAndDisplayCpuData(budgetSlider.value, cpuBrandSelect.value);
+      fetchAndDisplayCoolerData(budgetSlider.value);
+      fetchAndDisplayMboardData(
         budgetSlider.value,
         preferredManufacturerSelect.value
       );
-    }
+      fetchAndDisplayRAMData(budgetSlider.value, memorySizeSelect.value);
+      if (budgetSlider.value >= 2) {
+        fetchAndDisplayVgaData(
+          budgetSlider.value,
+          preferredManufacturerSelect.value
+        );
+      }
+      hideLoading(); // 로딩창 숨기기
+    }, 2000); // 2000초 딜레이
   });
 
   function updateActiveLabel(value) {
