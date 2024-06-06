@@ -93,7 +93,7 @@
 
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <main>
-      <br/>
+      <br />
       <h1>옵션 설정</h1>
       <div class="container">
         <div class="form-section">
@@ -128,7 +128,11 @@
             </div>
             <div class="select-group">
               <label for="preferredManufacturer">선호 제조사</label>
-              <select id="preferredManufacturer" name="preferredManufacturer" required>
+              <select
+                id="preferredManufacturer"
+                name="preferredManufacturer"
+                required
+              >
                 <option value="ANY">상관없음</option>
                 <option value="ASUS">ASUS</option>
                 <option value="COLORFUL">COLORFUL</option>
@@ -192,7 +196,6 @@
           <br /><br /><br />
           <button type="submit" id="recommendButton">추천 받기</button>
           <div id="recommendationResult"></div>
-
         </div>
         <div class="recommendation-section">
           <div class="recommendation-box">
@@ -219,8 +222,8 @@
                 <td id="ramPrice1"></td>
               </tr>
               <tr>
-                <td id="gpu1">그래픽카드</td>
-                <td id="gpuPrice1">가격5</td>
+                <td id="vga1">내장그래픽 사용</td>
+                <td id="vgaPrice1">0원</td>
               </tr>
               <tr>
                 <td id="ssd1">SSD</td>
@@ -268,8 +271,8 @@
                 <td id="ramPrice2"></td>
               </tr>
               <tr>
-                <td id="gpu2"></td>
-                <td id="gpuPrice2"></td>
+                <td id="vga2">내장그래픽 사용</td>
+                <td id="vgaPrice2">0원</td>
               </tr>
               <tr>
                 <td>SSD</td>
@@ -317,8 +320,8 @@
                 <td id="ramPrice3"></td>
               </tr>
               <tr>
-                <td id="gpu3">그래픽카드</td>
-                <td id="gpuPrice3">가격5</td>
+                <td id="vga3">내장그래픽 사용</td>
+                <td id="vgaPrice3">0원</td>
               </tr>
               <tr>
                 <td>SSD</td>
@@ -366,8 +369,8 @@
                 <td id="ramPrice4"></td>
               </tr>
               <tr>
-                <td id="gpu4">그래픽카드</td>
-                <td id="gpuPrice4">가격5</td>
+                <td id="vga4">내장그래픽 사용</td>
+                <td id="vgaPrice4">0원</td>
               </tr>
               <tr>
                 <td>SSD</td>
@@ -391,10 +394,13 @@
               </tr>
             </table>
           </div>
-          
         </div>
       </div>
     </main>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>

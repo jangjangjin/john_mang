@@ -1,3 +1,32 @@
+.loading {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 12%;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #ffa500;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 2fr; /* 비율을 변경하여 오른쪽 공간을 줄임 */
@@ -11,15 +40,16 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   margin-right: 250px;
-
+  display: none;
 }
+
 .recommendation-box {
   border: 1px solid #ccc;
   padding: 10px;
   height: auto;
   overflow-y: auto;
- 
 }
+
 /* 테이블 스타일 */
 table {
   width: 100%;
@@ -29,7 +59,8 @@ table {
   color: #ffffff; /* 텍스트 색상을 흰색으로 */
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ccc;
   padding: 8px;
   text-align: left;
@@ -62,7 +93,8 @@ h1 {
   margin-left: 130px;
   cursor: pointer;
 }
-h2, h3 {
+h2,
+h3 {
   font-size: 30px;
   font-family: "Ownglyph_meetme-Rg";
 }
