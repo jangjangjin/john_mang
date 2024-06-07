@@ -38,6 +38,10 @@ function displayCpuData(data) {
     const socketCell = document.createElement("td");
     socketCell.textContent = cpu["소켓"];
     row.appendChild(socketCell);
+    console.log(cpu["소켓"]);
+    const BiGraphicsCell = document.createElement("td");
+    BiGraphicsCell.textContent = cpu["내장그래픽 여부"];
+    row.appendChild(BiGraphicsCell);
 
     const priceCell = document.createElement("td");
     priceCell.textContent = cpu["가격"];
