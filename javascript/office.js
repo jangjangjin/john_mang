@@ -1,15 +1,12 @@
 // 로딩창
-
 // 로딩 창 표시 함수
 function showLoading() {
   document.getElementById("loading").style.display = "flex";
 }
-
 // 로딩 창 숨기기 함수
 function hideLoading() {
   document.getElementById("loading").style.display = "none";
 }
-
 document.addEventListener("DOMContentLoaded", () => {
   // Firebase 초기화
   if (!firebase.apps.length) {
@@ -17,7 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     firebase.app();
   }
-
   const db = firebase.database();
   const budgetSlider = document.getElementById("budgetSlider");
   const labels = document.querySelectorAll(".label");
@@ -28,6 +24,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "preferredManufacturer"
   );
   const memorySizeSelect = document.getElementById("memorySize");
+  const diskSizeSelect = document.getElementById("diskSize");
+  const selectedDiskSize = diskSizeSelect.value;
+  const hddSizeSelect = document.getElementById("hddSize");
   const socketMemorySpecs = [];
   const memorySpecs = [];
   const powerSpecs = [];
@@ -77,6 +76,8 @@ document.addEventListener("DOMContentLoaded", () => {
           preferredManufacturerSelect.value
         );
       }
+      fetchAndDisplaySSDData(budgetSlider.value, diskSizeSelect.value);
+      fetchAndDisplayHDDData(budgetSlider.value, hddSizeSelect.value);
       hideLoading(); // 로딩창 숨기기
     }, 2000); // 2000초 딜레이
   });
@@ -347,8 +348,13 @@ document.addEventListener("DOMContentLoaded", () => {
           const isManufacturerMatch =
             preferredManufacturer === "ANY" ||
             vga["제조사"] === preferredManufacturer;
+          // 넘버링이 4000 이상인 그래픽 카드만 필터링
+          const isNumberingValid = parseInt(vga["넘버링"], 10) >= 4000;
           return (
-            vgaPrice >= minPrice && vgaPrice <= maxPrice && isManufacturerMatch
+            vgaPrice >= minPrice && 
+            vgaPrice <= maxPrice && 
+            isManufacturerMatch &&
+            isNumberingValid
           );
         });
         if (filteredVgas.length > 0) {
@@ -363,13 +369,13 @@ document.addEventListener("DOMContentLoaded", () => {
           "<p>그래픽 카드 데이터를 불러올 수 없습니다.</p>";
       }
     });
-  }
+}
 
   function getVgaPriceLimitsByValue(value) {
     const priceLimits = {
       0: { minPrice: 0, maxPrice: 0 }, // 내장 그래픽 포함 경우, 50만원 이하 예산에서는 GPU 없음
       1: { minPrice: 0, maxPrice: 0 }, // 내장 그래픽 포함 경우, 50만원 이하 예산에서는 GPU 없음
-      2: { minPrice: 150000, maxPrice: 300000 },
+      2: { minPrice: 100000, maxPrice: 500000 },
       3: { minPrice: 300000, maxPrice: 500000 },
       4: { minPrice: 500000, maxPrice: 700000 },
       5: { minPrice: 700000, maxPrice: 1000000 },
@@ -377,6 +383,144 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
   }
+
+  function fetchAndDisplaySSDData(value, diskSize) {
+    const ssdRef = db.ref("부품/0/SSD");
+    ssdRef.once("value", (snapshot) => {
+        const ssds = snapshot.val();
+        if (ssds) {
+            const { minPrice, maxPrice } = getSSDPriceLimitsByValue(value);
+            const filteredSsds = Object.values(ssds).filter((ssd) => {
+                const ssdPrice = parseInt(String(ssd["가격"]).replace(/,/g, ""), 10);
+                let isDiskSizeMatch = false;
+
+                if (diskSize === "0") {
+                    // "0" 선택 시 1TB로 고정
+                    isDiskSizeMatch = isCorrectDiskSize(ssd["저장용량"], "3");
+                } else {
+                    isDiskSizeMatch = isCorrectDiskSize(ssd["저장용량"], diskSize);
+                }
+
+                return ssdPrice >= minPrice && ssdPrice <= maxPrice && isDiskSizeMatch;
+            });
+
+            if (filteredSsds.length > 0) {
+                const randomSsds = getRandomElements(filteredSsds, 4);
+                displayData(randomSsds, "ssd");
+            } else {
+                recommendationResult.innerHTML = "<p>적합한 SSD를 찾을 수 없습니다.</p>";
+            }
+        } else {
+            recommendationResult.innerHTML = "<p>SSD 데이터를 불러올 수 없습니다.</p>";
+        }
+    });
+}
+
+function fetchAndDisplayHDDData(value, hddSize) {
+  const hddRef = db.ref("부품/0/HDD");
+  hddRef.once("value", (snapshot) => {
+      const hdds = snapshot.val();
+      if (hdds) {
+          const { minPrice, maxPrice } = getHDDPriceLimitsByValue(value);
+          const filteredHdds = Object.values(hdds).filter((hdd) => {
+              const hddPrice = parseInt(String(hdd["가격"]).replace(/,/g, ""), 10);
+              let ishddSizeMatch = false;
+
+              if (hddSize === "0") {
+                  ishddSizeMatch = isCorrectHDDSize(hdd["용량"], "1");
+              } else {
+                  ishddSizeMatch = isCorrectHDDSize(hdd["용량"], hddSize);
+              }
+
+              return hddPrice >= minPrice && hddPrice <= maxPrice && ishddSizeMatch;
+          });
+
+          if (filteredHdds.length > 0) {
+              const randomHdds = getRandomElements(filteredHdds, 4);
+              displayData(randomHdds, "hdd");
+          } else {
+              recommendationResult.innerHTML = "<p>적합한 하드 디스크를 찾을 수 없습니다.</p>";
+          }
+      } else {
+          recommendationResult.innerHTML = "<p>하드 디스크 데이터를 불러올 수 없습니다.</p>";
+      }
+  });
+}
+
+function getHDDPriceLimitsByValue(value) {
+  const priceLimits = {
+      0: { minPrice: 0, maxPrice: 140000 },
+      1: { minPrice: 0, maxPrice: Infinity },
+      2: { minPrice: 0, maxPrice: Infinity },
+      3: { minPrice: 0, maxPrice: Infinity },
+      4: { minPrice: 0, maxPrice: Infinity }
+  };
+  return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
+}
+
+function isCorrectHDDSize(hddSize, selectedSize) {
+  const normalizedHDDSize = hddSize.replace(/\s+/g, '').toUpperCase();
+
+  switch (selectedSize) {
+      case "1":
+          return ["1TB", "1.8TB"].includes(normalizedHDDSize);
+      case "2":
+          return ["2TB", "2.4TB"].includes(normalizedHDDSize);
+      case "3":
+          return ["4TB"].includes(normalizedHDDSize);
+      case "4":
+          const sizePattern = /(\d+)(TB|GB)/;
+          const match = normalizedHDDSize.match(sizePattern);
+          if (match && match[2] === "TB") {
+              const sizeInTB = parseInt(match[1], 10);
+              return sizeInTB >= 5;
+          }
+          return false;
+      default:
+          return false;
+  }
+}
+
+
+function isCorrectDiskSize(ssdSize, selectedSize) {
+  const normalizedSSDSize = ssdSize.replace(/\s+/g, '').toUpperCase();
+
+  switch (selectedSize) {
+      case "1":
+          return ["250GB", "256GB"].includes(normalizedSSDSize);
+      case "2":
+          return ["500GB", "512GB"].includes(normalizedSSDSize);
+      case "3":
+          return normalizedSSDSize === "1TB";
+      case "4":
+          return normalizedSSDSize === "2TB";
+      case "5":
+          return ["4TB", "5TB"].includes(normalizedSSDSize);
+      case "6":
+          const sizePattern = /(\d+)(TB|GB)/;
+          const match = normalizedSSDSize.match(sizePattern);
+          if (match && match[2] === "TB") {
+              const sizeInTB = parseInt(match[1], 10);
+              return sizeInTB >= 5;
+          }
+          return false;
+      default:
+          return false;
+  }
+}
+
+function getSSDPriceLimitsByValue(value) {
+    const priceLimits = {
+        0: { minPrice: 0, maxPrice: 140000 },
+        1: { minPrice: 0, maxPrice: Infinity },
+        2: { minPrice: 0, maxPrice: Infinity },
+        3: { minPrice: 0, maxPrice: Infinity },
+        4: { minPrice: 0, maxPrice: Infinity },
+        5: { minPrice: 0, maxPrice: Infinity },
+        6: { minPrice: 0, maxPrice: Infinity }
+    };
+    return priceLimits[value] || { minPrice: 0, maxPrice: 0 };
+}
 
   function getRandomElements(array, count) {
     const shuffled = array.slice();
@@ -391,12 +535,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return shuffled.slice(min);
   }
+
+
   function displayData(items, type) {
     const elements = [
       { name: `${type}1`, price: `${type}Price1` },
       { name: `${type}2`, price: `${type}Price2` },
       { name: `${type}3`, price: `${type}Price3` },
-      { name: `${type}4`, price: `${type}Price4` },
+      { name: `${type}4`, price: `${type}Price4` }
     ];
 
     elements.forEach((element, index) => {
@@ -406,101 +552,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (itemElement && itemPriceElement) {
         if (item) {
-          if (type === "ram" && index === 0 && items.length === 1) {
-            itemElement.textContent = `${item["Name"]} x2`;
-            const itemPrice =
-              parseInt(String(item["가격"]).replace(/,/g, ""), 10) * 2;
-            itemPriceElement.textContent = `${itemPrice}원`;
-            totalCosts[index] += itemPrice;
-          } else {
-            itemElement.textContent = item["이름"] || item["Name"];
-            const itemPrice = parseInt(
-              String(item["가격"]).replace(/,/g, ""),
-              10
-            );
-            itemPriceElement.textContent = `${itemPrice}원`;
-            totalCosts[index] += itemPrice;
-          }
+          itemElement.textContent = item["이름"] || item["Name"];
+          const itemPrice = parseInt(String(item["가격"]).replace(/,/g, ""), 10);
+          itemPriceElement.textContent = `${itemPrice}원`;
+          totalCosts[index] += itemPrice;
         } else {
-          itemElement.textContent = `적합한 ${
-            type === "cpu"
-              ? "CPU"
-              : type === "cooler"
-              ? "쿨러"
-              : type === "ram"
-              ? "램"
-              : "메인보드"
-          }를 찾을 수 없습니다.`;
+          itemElement.textContent = `적합한 ${type === "cpu" ? "CPU" : type === "cooler" ? "쿨러" : type === "ram" ? "램" : type === "mboard" ? "메인보드" : type === "SSD" ? "SSD" : "HDD"}를 찾을 수 없습니다.`;
           itemPriceElement.textContent = "";
         }
       } else {
-        console.error(
-          `Element with ID ${element.name} or ${element.price} not found.`
-        );
+        console.error(`Element with ID ${element.name} or ${element.price} not found.`);
       }
     });
 
     totalCosts.forEach((totalCost, index) => {
       const totalElement = document.getElementById(`total${index + 1}`);
-      const totalPriceElement = document.getElementById(
-        `totalPrice${index + 1}`
-      );
+      const totalPriceElement = document.getElementById(`totalPrice${index + 1}`);
       if (totalElement && totalPriceElement) {
         totalElement.textContent = "총 합계금액";
         totalPriceElement.textContent = `${totalCost}원`;
       } else {
-        console.error(
-          `Element with ID total${index + 1} or totalPrice${
-            index + 1
-          } not found.`
-        );
-      }
-    });
-  }
-  function displayVgaData(vgas) {
-    const vgaElements = [
-      { name: "vga1", price: "vgaPrice1" },
-      { name: "vga2", price: "vgaPrice2" },
-      { name: "vga3", price: "vgaPrice3" },
-      { name: "vga4", price: "vgaPrice4" },
-    ];
-    // VGA 데이터 표시
-    vgaElements.forEach((element, index) => {
-      const vga = vgas[index]; // vgas 배열에서 VGA를 가져옴
-      const vgaElement = document.getElementById(element.name);
-      const vgaPriceElement = document.getElementById(element.price);
-
-      if (vga) {
-        if (vgaElement) {
-          vgaElement.textContent = `${vga["이름"]}`;
-        }
-
-        if (vgaPriceElement) {
-          const vgaPrice = parseInt(vga["가격"], 10);
-          vgaPriceElement.textContent = `${vgaPrice}원`;
-          totalCosts[index] += vgaPrice;
-          console.log(vga["이름"], vgaPrice);
-        }
-      } else {
-        if (vgaElement) {
-          vgaElement.textContent = "적합한 그래픽 카드를 찾을 수 없습니다.";
-        }
-
-        if (vgaPriceElement) {
-          vgaPriceElement.textContent = "";
-        }
-      }
-    });
-
-    // 각 견적 상자의 부품 가격 총 합을 표시
-    totalCosts.forEach((totalCost, index) => {
-      const totalElement = document.getElementById(`total${index + 1}`);
-      const totalPriceElement = document.getElementById(
-        `totalPrice${index + 1}`
-      );
-      if (totalElement && totalPriceElement) {
-        totalElement.textContent = "총 합계금액";
-        totalPriceElement.textContent = `${totalCost}원`;
+        console.error(`Element with ID total${index + 1} or totalPrice${index + 1} not found.`);
       }
     });
   }
