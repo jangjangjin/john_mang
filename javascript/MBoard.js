@@ -38,7 +38,7 @@ function displayCpuData(data) {
     const socketCell = document.createElement("td");
     socketCell.textContent = MBoard["소켓"];
     row.appendChild(socketCell);
-
+  
     const priceCell = document.createElement("td");
     priceCell.textContent = MBoard["가격"];
     row.appendChild(priceCell);
