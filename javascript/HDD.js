@@ -31,6 +31,10 @@ function displayCpuData(data) {
     priceCell.textContent = HDD["가격"];
     row.appendChild(priceCell);
 
+    const wayCell = document.createElement("td");
+    wayCell.textContent = HDD["용량"];
+    row.appendChild(wayCell);
+    
     tableBody.appendChild(row);
   });
 }

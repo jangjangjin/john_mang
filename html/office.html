@@ -93,7 +93,7 @@
 
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <main>
-      <br/>
+      <br />
       <h1>옵션 설정</h1>
       <div class="container">
         <div class="form-section">
@@ -128,7 +128,11 @@
             </div>
             <div class="select-group">
               <label for="preferredManufacturer">선호 제조사</label>
-              <select id="preferredManufacturer" name="preferredManufacturer" required>
+              <select
+                id="preferredManufacturer"
+                name="preferredManufacturer"
+                required
+              >
                 <option value="ANY">상관없음</option>
                 <option value="ASUS">ASUS</option>
                 <option value="COLORFUL">COLORFUL</option>
@@ -180,19 +184,16 @@
               <label for="hddSize">하드 디스크</label>
               <select id="hddSize" name="hddSize" required>
                 <option value="0">상관없음</option>
-                <option value="1">250GB</option>
-                <option value="2">500GB</option>
-                <option value="3">1TB</option>
-                <option value="4">2TB</option>
-                <option value="5">4TB</option>
-                <option value="6">5TB 이상</option>
+                <option value="1">1TB</option>
+                <option value="2">2TB</option>
+                <option value="3">4TB</option>
+                <option value="4">5TB 이상</option>
               </select>
             </div>
           </div>
           <br /><br /><br />
           <button type="submit" id="recommendButton">추천 받기</button>
           <div id="recommendationResult"></div>
-
         </div>
         <div class="recommendation-section">
           <div class="recommendation-box">
@@ -272,12 +273,12 @@
                 <td id="vgaPrice2">0원</td>
               </tr>
               <tr>
-                <td>SSD</td>
-                <td>가격6</td>
+                <td id="ssd2">SSD</td>
+                <td id="ssdPrice2">가격6</td>
               </tr>
               <tr>
-                <td>HDD</td>
-                <td>가격7</td>
+                <td id="hdd2">HDD</td>
+                <td id="hddPrice2">가격7</td>
               </tr>
               <tr>
                 <td>케이스</td>
@@ -321,12 +322,12 @@
                 <td id="vgaPrice3">0원</td>
               </tr>
               <tr>
-                <td>SSD</td>
-                <td>가격6</td>
+                <td id="ssd3">SSD</td>
+                <td id="ssdPrice3">가격6</td>
               </tr>
               <tr>
-                <td>HDD</td>
-                <td>가격7</td>
+                <td id="hdd3">HDD</td>
+                <td id="hddPrice3">가격7</td>
               </tr>
               <tr>
                 <td>케이스</td>
@@ -370,12 +371,12 @@
                 <td id="vgaPrice4">0원</td>
               </tr>
               <tr>
-                <td>SSD</td>
-                <td>가격6</td>
+                <td id="ssd4">SSD</td>
+                <td id="ssdPrice4">가격6</td>
               </tr>
               <tr>
-                <td>HDD</td>
-                <td>가격7</td>
+                <td id="hdd4">HDD</td>
+                <td id="hddPrice4">가격7</td>
               </tr>
               <tr>
                 <td>케이스</td>
@@ -391,10 +392,13 @@
               </tr>
             </table>
           </div>
-          
         </div>
       </div>
     </main>
+
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-auth.js"></script>

@@ -28,7 +28,7 @@ function displayCpuData(data) {
     row.appendChild(nameCell);
 
     const wayCell = document.createElement("td");
-    wayCell.textContent = SSD["방식"];
+    wayCell.textContent = SSD["저장용량"];
     row.appendChild(wayCell);
 
     const priceCell = document.createElement("td");
