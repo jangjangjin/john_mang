@@ -217,3 +217,18 @@ select:focus {
 button:hover {
   background-color: #e71029;
 }
+
+#recommendButton {
+  font-family: "Ownglyph_meetme-Rg";
+  width: 50%;
+  height: 10%;
+  font-size: 30px;
+  padding: 4px 10px;
+  margin-left: 20px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #ffa500;
+  color: #000000;
+  cursor: pointer;
+}
