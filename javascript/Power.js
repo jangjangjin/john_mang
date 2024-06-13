@@ -27,9 +27,13 @@ function displayCpuData(data) {
     nameCell.textContent = Power["이름"];
     row.appendChild(nameCell);
 
-    const wayCell = document.createElement("td");
-    wayCell.textContent = Power["방식"];
-    row.appendChild(wayCell);
+    const factCell = document.createElement("td");
+    factCell.textContent = Power["제조사"];
+    row.appendChild(factCell);
+
+    const power_vol = document.createElement("td");
+    power_vol.textContent = Power["파워용량"];
+    row.appendChild(power_vol);
 
     const priceCell = document.createElement("td");
     priceCell.textContent = Power["가격"];
